@@ -541,6 +541,63 @@
       margin-top: 6px;
     }
 
+    /* 탭 */
+    .sheet-tabs {
+      display: flex;
+      margin-bottom: 14px;
+      border: 1px solid var(--border-mid);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+    .sheet-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 10px 0;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sheet-tab.active { background: var(--green); color: var(--bg); font-weight: 500; }
+    .sheet-tab-panel { display: none; }
+    .sheet-tab-panel.active { display: block; }
+
+    /* 규칙 목록 */
+    .rule-list {
+      max-height: 340px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .rule-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 9px 12px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .rule-canonical {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--green);
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+    .rule-keywords {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
     .sheet-actions { display: flex; gap: 8px; margin-top: 12px; }
 
     .btn-sheet-save {
@@ -753,17 +810,27 @@
   <div class="sheet-panel">
     <div class="sheet-handle"></div>
     <div class="sheet-title">브랜드 약칭 규칙</div>
-    <div class="sheet-desc">
-      형식: <code>약칭1, 약칭2 = 정식브랜드명</code><br>
-      여러 약칭은 쉼표로 구분. 기본 규칙은 HTML 파일에 내장돼 있어요.<br>
-      팀 공통 규칙은 HTML 파일을 수정하세요.
+    <div class="sheet-tabs">
+      <button class="sheet-tab active" id="tabView">현재 규칙 보기</button>
+      <button class="sheet-tab" id="tabEdit">오버라이드 편집</button>
     </div>
-    <textarea class="alias-textarea" id="aliasTa" spellcheck="false"></textarea>
-    <div class="alias-count" id="aliasCount"></div>
-    <div class="sheet-actions">
-      <button class="btn-sheet-cancel" id="btnAliasReset">기본값으로</button>
-      <button class="btn-sheet-cancel" id="btnAliasCancel">취소</button>
-      <button class="btn-sheet-save" id="btnAliasSave">저장</button>
+    <div class="sheet-tab-panel active" id="panelView">
+      <div class="alias-count" id="ruleTotal" style="margin-bottom:8px;text-align:left"></div>
+      <div class="rule-list" id="ruleList"></div>
+    </div>
+    <div class="sheet-tab-panel" id="panelEdit">
+      <div class="sheet-desc">
+        형식: <code>약칭1, 약칭2 = 정식브랜드명</code><br>
+        여러 약칭은 쉼표로 구분. 기본 규칙은 HTML 파일에 내장돼 있어요.<br>
+        팀 공통 규칙은 HTML 파일을 수정하세요.
+      </div>
+      <textarea class="alias-textarea" id="aliasTa" spellcheck="false"></textarea>
+      <div class="alias-count" id="aliasCount"></div>
+      <div class="sheet-actions">
+        <button class="btn-sheet-cancel" id="btnAliasReset">기본값으로</button>
+        <button class="btn-sheet-cancel" id="btnAliasCancel">취소</button>
+        <button class="btn-sheet-save" id="btnAliasSave">저장</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1142,9 +1209,54 @@ function doDownload() {
 }
 
 // ── Alias Sheet ──
+
+// 탭 전환
+function switchTab(tab) {
+  document.querySelectorAll('.sheet-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sheet-tab-panel').forEach(p=>p.classList.remove('active'));
+  if (tab === 'view') {
+    document.getElementById('tabView').classList.add('active');
+    document.getElementById('panelView').classList.add('active');
+    renderRuleList();
+  } else {
+    document.getElementById('tabEdit').classList.add('active');
+    document.getElementById('panelEdit').classList.add('active');
+  }
+}
+
+document.getElementById('tabView').addEventListener('click', ()=>switchTab('view'));
+document.getElementById('tabEdit').addEventListener('click', ()=>switchTab('edit'));
+
+// 현재 적용 중인 규칙 목록 렌더
+function renderRuleList() {
+  const list = document.getElementById('ruleList');
+  list.innerHTML = '';
+
+  // aliasMap을 canonical → [keywords] 로 역매핑
+  const canonicalMap = {};
+  Object.entries(aliasMap).forEach(([kw, canonical]) => {
+    if (!canonicalMap[canonical]) canonicalMap[canonical] = [];
+    canonicalMap[canonical].push(kw);
+  });
+
+  const entries = Object.entries(canonicalMap).sort((a,b)=>a[0].localeCompare(b[0],'ko'));
+  document.getElementById('ruleTotal').textContent = `총 ${entries.length}개 브랜드 규칙 적용 중`;
+
+  entries.forEach(([canonical, kws]) => {
+    const d = document.createElement('div');
+    d.className = 'rule-item';
+    d.innerHTML = `
+      <span class="rule-canonical">${canonical}</span>
+      <span class="rule-keywords">${kws.join(', ')}</span>
+    `;
+    list.appendChild(d);
+  });
+}
+
 document.getElementById('btnAliases').addEventListener('click',()=>{
   document.getElementById('aliasTa').value=localStorage.getItem('vshop_alias_override')||'';
   updateAliasCount(document.getElementById('aliasTa').value);
+  switchTab('view'); // 열 때 항상 보기 탭 먼저
   document.getElementById('aliasSheet').classList.add('open');
 });
 document.getElementById('aliasTa').addEventListener('input',e=>updateAliasCount(e.target.value));
