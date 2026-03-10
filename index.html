@@ -4,24 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>입고 입력기</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0F0F0E;
-      --surface: #1A1A18;
-      --surface2: #222220;
-      --border: #2C2C2A;
-      --accent: #E8773A;
-      --accent-glow: rgba(232,119,58,0.15);
-      --text: #EDECEA;
-      --text-dim: #7A7A78;
-      --text-muted: #3E3E3C;
-      --success: #5CC97A;
-      --font-mono: 'Space Mono', monospace;
-      --font-kr: 'Noto Sans KR', sans-serif;
+      --bg:          #F0EBE1;
+      --bg2:         #EAE3D6;
+      --surface:     #E6DFD0;
+      --surface2:    #DDD5C4;
+      --green:       #1E3A32;
+      --green-mid:   #2D5446;
+      --green-light: rgba(30,58,50,0.08);
+      --green-dim:   rgba(30,58,50,0.14);
+      --salmon:      #E8A090;
+      --border:      rgba(30,58,50,0.14);
+      --border-mid:  rgba(30,58,50,0.24);
+      --text:        #1A2E28;
+      --text-dim:    #5A7268;
+      --text-muted:  #9AB0A8;
+      --success:     #2D7A50;
+      --warn:        #B87A30;
+      --info:        #2A5A8A;
+      --font-serif:  'DM Serif Display', serif;
+      --font-sans:   'DM Sans', 'Noto Sans KR', sans-serif;
+      --font-mono:   'Space Mono', monospace;
+      --r:           10px;
     }
 
     html, body { height: 100%; }
@@ -29,478 +38,698 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-kr);
+      font-family: var(--font-sans);
       max-width: 480px;
       margin: 0 auto;
-      padding-bottom: 88px;
+      padding-bottom: 96px;
       -webkit-font-smoothing: antialiased;
+      min-height: 100%;
     }
 
-    /* ── HEADER ── */
+    /* ══════════════════════════════
+       HEADER
+    ══════════════════════════════ */
     .app-header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 14px 14px;
+      background: var(--green);
+      padding: 18px 18px 20px;
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
-    .app-title {
+    .header-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .app-name {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      color: var(--bg);
+      letter-spacing: -0.01em;
+    }
+
+    .app-version {
       font-family: var(--font-mono);
       font-size: 9px;
-      color: var(--accent);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
+      color: rgba(240,235,225,0.38);
+      letter-spacing: 0.14em;
+    }
+
+    /* 사용법 */
+    .usage-box {
+      background: rgba(240,235,225,0.09);
+      border: 1px solid rgba(240,235,225,0.16);
+      border-radius: var(--r);
+      padding: 11px 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(240,235,225,0.6);
+      font-family: var(--font-sans);
+      font-weight: 300;
+    }
+
+    .usage-box strong {
+      color: rgba(240,235,225,0.9);
+      font-weight: 500;
+    }
+
+    .usage-examples {
+      margin-top: 7px;
       display: flex;
-      align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
-    .app-title::before {
-      content: '';
-      width: 5px; height: 5px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: inline-block;
+    .ex-chip {
+      background: rgba(240,235,225,0.13);
+      border: 1px solid rgba(240,235,225,0.22);
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(240,235,225,0.8);
     }
 
+    /* 행거 설정 */
     .hanger-setup {
       display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 7px;
+      grid-template-columns: 90px 1fr;
+      gap: 8px;
     }
 
     .setup-field label {
       display: block;
-      font-size: 9px;
-      color: var(--text-dim);
       font-family: var(--font-mono);
-      letter-spacing: 0.14em;
-      margin-bottom: 4px;
+      font-size: 8px;
+      color: rgba(240,235,225,0.4);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
     }
 
     .setup-input {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      color: var(--text);
-      font-family: var(--font-kr);
-      font-size: 16px;
-      font-weight: 500;
-      padding: 9px 11px;
+      background: rgba(240,235,225,0.1);
+      border: 1px solid rgba(240,235,225,0.2);
+      border-radius: 8px;
+      color: var(--bg);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 400;
+      padding: 10px 13px;
       outline: none;
-      transition: border-color 0.15s;
       -webkit-appearance: none;
+      transition: border-color 0.15s, background 0.15s;
     }
 
-    .setup-input:focus { border-color: var(--accent); }
-    .setup-input::placeholder { color: var(--text-muted); font-size: 13px; }
+    .setup-input:focus {
+      border-color: rgba(240,235,225,0.5);
+      background: rgba(240,235,225,0.15);
+    }
 
-    /* ── STATS ── */
+    .setup-input::placeholder {
+      color: rgba(240,235,225,0.25);
+      font-size: 13px;
+    }
+
+    /* ══════════════════════════════
+       STATS
+    ══════════════════════════════ */
     .stats-bar {
-      padding: 9px 16px;
       display: flex;
+      background: var(--bg2);
       border-bottom: 1px solid var(--border);
-      background: var(--bg);
     }
 
-    .stat-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
-    .stat-num { font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--accent); line-height: 1; }
-    .stat-label { font-size: 9px; color: var(--text-dim); }
-    .stat-div { width: 1px; height: 26px; background: var(--border); }
-
-    /* ── HINT ── */
-    .hint-bar {
-      padding: 8px 14px 3px;
-      font-size: 10px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      letter-spacing: 0.05em;
-    }
-
-    /* ── LIST ── */
-    .items-list {
-      padding: 6px 14px;
+    .stat-item {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 0;
+      gap: 2px;
+      border-right: 1px solid var(--border);
     }
 
-    /* ── ITEM ROW ── */
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      color: var(--green);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+    }
+
+    /* ══════════════════════════════
+       AUTOSAVE BAR
+    ══════════════════════════════ */
+    .save-bar {
+      padding: 5px 16px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      letter-spacing: 0.07em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+
+    .save-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .save-dot.saving { background: var(--warn); }
+    .save-dot.saved  { background: var(--success); }
+
+    /* ══════════════════════════════
+       RESTORE BANNER
+    ══════════════════════════════ */
+    .restore-banner {
+      background: rgba(42,90,138,0.08);
+      border: 1px solid rgba(42,90,138,0.2);
+      border-radius: 8px;
+      margin: 10px 16px 0;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .restore-text { font-size: 12px; color: var(--info); line-height: 1.45; }
+    .restore-text strong { font-weight: 500; }
+
+    .btn-restore-dismiss {
+      background: none;
+      border: 1px solid rgba(42,90,138,0.3);
+      border-radius: 100px;
+      color: var(--info);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      padding: 4px 12px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════
+       LIST
+    ══════════════════════════════ */
+    .items-list {
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    /* ══════════════════════════════
+       ROW
+    ══════════════════════════════ */
     .item-row {
       display: flex;
-      align-items: stretch;
-      gap: 5px;
-      height: 46px;
+      align-items: center;
+      gap: 7px;
+      height: 48px;
       transition: opacity 0.2s;
     }
 
-    /* 아직 도달 안 한 빈 행 — 흐리게 */
-    .item-row.future {
-      opacity: 0.28;
-    }
-
-    /* 현재 입력 중인 행 */
-    .item-row.current .price-input {
-      border-color: var(--accent) !important;
-      background: var(--surface2) !important;
-    }
+    .item-row.future { opacity: 0.18; }
 
     .item-num {
       font-family: var(--font-mono);
       font-size: 10px;
       color: var(--text-muted);
-      width: 20px;
+      width: 22px;
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
+      text-align: right;
       user-select: none;
+      transition: color 0.15s;
     }
 
-    .item-row.has-brand .item-num { color: var(--accent); }
-    .item-row.current .item-num { color: var(--text-dim); }
+    .item-row.has-data  .item-num { color: var(--text-dim); }
+    .item-row.has-brand .item-num { color: var(--green-mid); font-weight: 700; }
 
-    /* 브랜드 태그 버튼 */
-    .brand-tag {
-      flex-shrink: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 7px;
+    /* 입력칸 */
+    .combo-input {
+      flex: 1;
+      background: white;
+      border: 1px solid var(--border-mid);
+      border-radius: 9px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 15px;
+      padding: 0 13px;
+      height: 100%;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .combo-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px var(--green-light);
+    }
+
+    .combo-input::placeholder {
       color: var(--text-muted);
-      font-family: var(--font-kr);
       font-size: 12px;
-      padding: 0 9px;
-      cursor: pointer;
+      font-family: var(--font-sans);
+      font-weight: 300;
+    }
+
+    /* 미리보기 */
+    .parse-badge {
+      flex-shrink: 0;
       display: flex;
       align-items: center;
-      min-width: 36px;
-      max-width: 130px;
-      overflow: hidden;
-      -webkit-tap-highlight-color: transparent;
-      transition: border-color 0.12s, color 0.12s, background 0.12s;
-      /* button reset */
-      border: 1px solid var(--border);
+      min-width: 56px;
+      height: 100%;
     }
 
-    .brand-tag.has-value {
-      border-color: var(--accent) !important;
-      color: var(--accent);
-      background: var(--accent-glow);
+    .parse-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1px;
     }
 
-    .brand-tag-inner {
+    .badge-price {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--success);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .badge-brand {
+      font-size: 9px;
+      color: var(--green-mid);
+      max-width: 76px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    /* 가격 입력 */
-    .price-input {
-      flex: 1;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 18px;
-      font-weight: 700;
       text-align: right;
-      padding: 0 12px;
-      outline: none;
-      -webkit-appearance: none;
-      transition: border-color 0.12s, background 0.12s;
+      font-family: var(--font-mono);
+      letter-spacing: 0.02em;
     }
 
-    .price-input::placeholder {
+    /* ══════════════════════════════
+       COMPLETED
+    ══════════════════════════════ */
+    .completed-section { margin: 4px 16px 0; }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
       color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 400;
-      font-family: var(--font-kr);
+      text-transform: uppercase;
+      padding: 14px 0 8px;
+      border-top: 1px solid var(--border-mid);
     }
 
-    /* ── BRAND SHEET ── */
-    .brand-sheet {
+    .completed-hanger {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px 16px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ch-id {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--green);
+      letter-spacing: -0.01em;
+    }
+
+    .ch-meta { font-size: 11px; color: var(--text-dim); margin-top: 3px; font-weight: 300; }
+
+    .ch-count {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      color: var(--success);
+      letter-spacing: -0.03em;
+    }
+
+    /* ══════════════════════════════
+       BOTTOM BAR
+    ══════════════════════════════ */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: var(--bg);
+      border-top: 1px solid var(--border-mid);
+      display: flex;
+      gap: 8px;
+      z-index: 99;
+    }
+
+    .btn {
+      border: none;
+      border-radius: var(--r);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 10px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.12s, filter 0.12s;
+    }
+
+    .btn:active { transform: scale(0.96); filter: brightness(0.94); }
+
+    .btn-complete {
+      background: var(--green);
+      color: var(--bg);
+      flex: 1;
+      font-family: var(--font-serif);
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-complete:disabled {
+      background: var(--surface2);
+      color: var(--text-muted);
+    }
+
+    .btn-icon {
+      background: white;
+      color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      padding: 14px 15px;
+      font-size: 17px;
+    }
+
+    /* ══════════════════════════════
+       BOTTOM SHEETS
+    ══════════════════════════════ */
+    .sheet-overlay {
       position: fixed; inset: 0;
       z-index: 300;
       display: flex;
       align-items: flex-end;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s;
+      transition: opacity 0.22s;
     }
 
-    .brand-sheet.open { opacity: 1; pointer-events: all; }
+    .sheet-overlay.open { opacity: 1; pointer-events: all; }
 
-    .brand-backdrop {
+    .sheet-backdrop {
       position: absolute; inset: 0;
-      background: rgba(0,0,0,0.65);
+      background: rgba(26,46,40,0.55);
+      backdrop-filter: blur(2px);
     }
 
-    .brand-panel {
+    .sheet-panel {
       position: relative;
-      background: var(--surface);
-      border-radius: 16px 16px 0 0;
-      width: 100%;
-      padding: 16px 14px calc(16px + env(safe-area-inset-bottom));
-      transform: translateY(14px);
-      transition: transform 0.22s cubic-bezier(.22,1,.36,1);
-    }
-
-    .brand-sheet.open .brand-panel { transform: translateY(0); }
-
-    .brand-handle {
-      width: 34px; height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin: 0 auto 14px;
-    }
-
-    .brand-panel-title {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .brand-search {
-      width: 100%;
       background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      color: var(--text);
-      font-family: var(--font-kr);
-      font-size: 16px;
-      padding: 12px 13px;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    .brand-search:focus { border-color: var(--accent); }
-    .brand-search::placeholder { color: var(--text-muted); }
-
-    .brand-suggestions {
-      margin-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-height: 220px;
+      border-radius: 18px 18px 0 0;
+      width: 100%;
+      padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+      max-height: 86vh;
       overflow-y: auto;
+      transform: translateY(16px);
+      transition: transform 0.26s cubic-bezier(.22,1,.36,1);
     }
 
-    .brand-sug-item {
-      padding: 12px 13px;
-      background: var(--surface2);
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+    .sheet-overlay.open .sheet-panel { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 36px; height: 4px;
+      background: var(--border-mid);
+      border-radius: 2px;
+      margin: 0 auto 18px;
     }
 
-    .brand-sug-item:active { background: var(--accent-glow); color: var(--accent); }
-
-    .brand-actions { display: flex; gap: 7px; margin-top: 10px; }
-
-    .btn-brand-confirm {
-      flex: 1;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 9px;
-      font-family: var(--font-kr);
-      font-size: 15px;
-      font-weight: 700;
-      padding: 13px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+    .sheet-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
     }
 
-    .btn-brand-clear {
-      background: var(--surface2);
+    .sheet-desc {
+      font-size: 12px;
       color: var(--text-dim);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      font-family: var(--font-kr);
-      font-size: 13px;
-      padding: 13px 14px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: var(--green-light);
+      border-radius: 8px;
+      font-weight: 300;
     }
 
-    /* ── COMPLETED ── */
-    .completed-section { margin: 0 14px; }
+    .sheet-desc code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--green-dim);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: var(--green);
+    }
 
-    .section-title {
+    .alias-textarea {
+      width: 100%;
+      background: white;
+      border: 1px solid var(--border-mid);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 13px 14px;
+      outline: none;
+      resize: none;
+      height: 300px;
+      line-height: 1.8;
+      transition: border-color 0.15s;
+    }
+
+    .alias-textarea:focus { border-color: var(--green); }
+
+    .alias-count {
       font-family: var(--font-mono);
       font-size: 9px;
-      letter-spacing: 0.18em;
       color: var(--text-muted);
-      text-transform: uppercase;
-      padding: 12px 0 6px;
-      border-top: 1px solid var(--border);
+      text-align: right;
+      margin-top: 6px;
     }
 
-    .completed-hanger {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 10px 14px;
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    .sheet-actions { display: flex; gap: 8px; margin-top: 12px; }
 
-    .ch-id { font-family: var(--font-mono); font-size: 13px; color: var(--accent); font-weight: 700; }
-    .ch-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-    .ch-count { font-family: var(--font-mono); font-size: 24px; font-weight: 700; color: var(--success); }
-
-    /* ── BOTTOM BAR ── */
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 480px;
-      padding: 9px 13px calc(9px + env(safe-area-inset-bottom));
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 6px;
-      z-index: 99;
-    }
-
-    .btn {
+    .btn-sheet-save {
+      flex: 1;
+      background: var(--green);
+      color: var(--bg);
       border: none;
-      border-radius: 9px;
-      font-family: var(--font-kr);
-      font-size: 15px;
-      font-weight: 700;
-      padding: 13px 12px;
+      border-radius: var(--r);
+      font-family: var(--font-serif);
+      font-size: 17px;
+      padding: 14px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, opacity 0.15s;
     }
 
-    .btn:active { transform: scale(0.96); }
-    .btn-complete { background: var(--accent); color: white; flex: 1; }
-    .btn-complete:disabled { background: var(--surface2); color: var(--text-muted); }
-    .btn-icon { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); padding: 13px 14px; font-size: 17px; }
+    .btn-sheet-cancel {
+      background: white;
+      color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--r);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      padding: 14px 16px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    /* ── SETTINGS MODAL ── */
-    .modal-overlay {
+    /* ══════════════════════════════
+       CONFIRM DIALOG
+    ══════════════════════════════ */
+    .confirm-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.72);
-      z-index: 400;
+      z-index: 500;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(26,46,40,0.6);
+      backdrop-filter: blur(4px);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
     }
 
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
 
-    .modal {
-      background: var(--surface);
-      border-radius: 16px 16px 0 0;
-      padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
+    .confirm-box {
+      background: var(--bg);
+      border: 1px solid var(--border-mid);
+      border-radius: 18px;
+      padding: 28px 22px 22px;
       width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      transform: translateY(14px);
+      max-width: 320px;
+      transform: translateY(8px) scale(0.97);
       transition: transform 0.22s cubic-bezier(.22,1,.36,1);
     }
 
-    .modal-overlay.open .modal { transform: translateY(0); }
-    .modal-handle { width: 34px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 14px; }
-    .modal-title { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: 0.13em; margin-bottom: 7px; }
-    .modal-desc { font-size: 13px; color: var(--text-dim); line-height: 1.65; margin-bottom: 12px; }
-    .modal-desc strong { color: var(--text); }
+    .confirm-overlay.open .confirm-box { transform: translateY(0) scale(1); }
 
-    .modal-textarea {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    .confirm-icon { font-size: 32px; text-align: center; margin-bottom: 12px; }
+
+    .confirm-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 10px;
       color: var(--text);
-      font-family: var(--font-kr);
-      font-size: 13px;
-      padding: 11px;
-      outline: none;
-      resize: none;
-      height: 190px;
-      line-height: 1.7;
+      letter-spacing: -0.02em;
     }
 
-    .modal-textarea:focus { border-color: var(--accent); }
-    .brand-count { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); text-align: right; margin-top: 5px; }
-    .modal-actions { display: flex; gap: 7px; margin-top: 10px; }
-    .btn-save { background: var(--accent); color: white; flex: 1; padding: 13px; }
-    .btn-cancel { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); padding: 13px 16px; }
+    .confirm-msg {
+      font-size: 13px;
+      color: var(--text-dim);
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 22px;
+      white-space: pre-line;
+      font-weight: 300;
+    }
 
-    /* ── TOAST ── */
+    .confirm-actions { display: flex; gap: 8px; }
+
+    .btn-confirm-ok {
+      flex: 1;
+      background: var(--green);
+      color: var(--bg);
+      border: none;
+      border-radius: var(--r);
+      font-family: var(--font-serif);
+      font-size: 17px;
+      padding: 14px;
+      cursor: pointer;
+    }
+
+    .btn-confirm-cancel {
+      flex: 1;
+      background: white;
+      color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--r);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      padding: 14px;
+      cursor: pointer;
+    }
+
+    /* ══════════════════════════════
+       TOAST
+    ══════════════════════════════ */
     .toast {
       position: fixed;
-      top: 66px; left: 50%;
-      transform: translateX(-50%) translateY(-6px);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-kr);
-      font-size: 13px; font-weight: 500;
-      padding: 10px 18px;
+      top: 64px; left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background: var(--green);
+      color: var(--bg);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 400;
+      padding: 10px 20px;
       border-radius: 100px;
-      z-index: 500;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.18s, transform 0.18s;
+      z-index: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
       white-space: nowrap;
-      max-width: calc(100vw - 28px);
+      max-width: calc(100vw - 32px);
     }
 
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .toast.ok { background: var(--success); border-color: var(--success); color: #0F0F0E; font-weight: 700; }
+    .toast.ok   { background: var(--success); }
+    .toast.warn { background: var(--warn); }
+    .toast.info { background: var(--info); }
   </style>
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <div class="app-header">
-  <div class="app-title">RACK INPUT</div>
+  <div class="header-top">
+    <span class="app-name">신규입고 입력기</span>
+    <span class="app-version">MARKET IN YOU</span>
+  </div>
+
+  <div class="usage-box">
+    <strong>브랜드 약칭 + 가격</strong>을 한 칸에 입력 (가격은 천원 단위)<br>
+    브랜드 없는 물건은 숫자만 입력
+    <div class="usage-examples">
+      <span class="ex-chip">나이 34</span>
+      <span class="ex-chip">아디 28</span>
+      <span class="ex-chip">25</span>
+      <span class="ex-chip">폴로 120</span>
+    </div>
+  </div>
+
   <div class="hanger-setup">
     <div class="setup-field">
-      <label>RACK NO.</label>
+      <label>Rack No.</label>
       <input type="text" id="hangerNum" class="setup-input" placeholder="예: 2" inputmode="numeric">
     </div>
     <div class="setup-field">
-      <label>CATEGORY</label>
+      <label>Category</label>
       <input type="text" id="hangerCat" class="setup-input" placeholder="예: 스웨터">
     </div>
   </div>
 </div>
 
+<!-- ── STATS ── -->
 <div class="stats-bar">
   <div class="stat-item">
     <span class="stat-num" id="sNow">0</span>
     <span class="stat-label">현재 행거</span>
   </div>
-  <div class="stat-div"></div>
   <div class="stat-item">
     <span class="stat-num" id="sTotal">0</span>
     <span class="stat-label">전체 누계</span>
   </div>
-  <div class="stat-div"></div>
   <div class="stat-item">
     <span class="stat-num" id="sDone">0</span>
     <span class="stat-label">완료 행거</span>
   </div>
 </div>
 
-<div class="hint-bar">키패드 위 ▼ 버튼으로 다음 칸 이동 — 키패드 안 꺼짐</div>
+<!-- ── SAVE BAR ── -->
+<div class="save-bar">
+  <div class="save-dot" id="saveDot"></div>
+  <span id="saveLabel">자동저장 대기 중</span>
+</div>
+
+<div id="restoreBanner" style="display:none"></div>
 
 <div class="items-list" id="itemsList"></div>
 
@@ -509,395 +738,482 @@
   <div id="completedList"></div>
 </div>
 
+<!-- ── BOTTOM BAR ── -->
 <div class="bottom-bar">
-  <button class="btn btn-icon" id="btnSettings">⚙</button>
+  <button class="btn btn-icon" id="btnAliases">🏷</button>
   <button class="btn btn-complete" id="btnComplete" disabled>행거 완료</button>
   <button class="btn btn-icon" id="btnDownload">📥</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- Brand Sheet -->
-<div class="brand-sheet" id="brandSheet">
-  <div class="brand-backdrop" id="brandBackdrop"></div>
-  <div class="brand-panel">
-    <div class="brand-handle"></div>
-    <div class="brand-panel-title">▪ 브랜드 입력</div>
-    <input type="text" class="brand-search" id="brandSearch"
-      placeholder="브랜드 검색 또는 직접 입력"
-      autocomplete="off" autocorrect="off" spellcheck="false">
-    <div class="brand-suggestions" id="brandSuggestions"></div>
-    <div class="brand-actions">
-      <button class="btn-brand-clear" id="btnBrandClear">지우기</button>
-      <button class="btn-brand-confirm" id="btnBrandConfirm">확인</button>
+<!-- ── ALIAS SHEET ── -->
+<div class="sheet-overlay" id="aliasSheet">
+  <div class="sheet-backdrop" id="aliasBackdrop"></div>
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">브랜드 약칭 규칙</div>
+    <div class="sheet-desc">
+      형식: <code>약칭1, 약칭2 = 정식브랜드명</code><br>
+      여러 약칭은 쉼표로 구분. 기본 규칙은 HTML 파일에 내장돼 있어요.<br>
+      팀 공통 규칙은 HTML 파일을 수정하세요.
+    </div>
+    <textarea class="alias-textarea" id="aliasTa" spellcheck="false"></textarea>
+    <div class="alias-count" id="aliasCount"></div>
+    <div class="sheet-actions">
+      <button class="btn-sheet-cancel" id="btnAliasReset">기본값으로</button>
+      <button class="btn-sheet-cancel" id="btnAliasCancel">취소</button>
+      <button class="btn-sheet-save" id="btnAliasSave">저장</button>
     </div>
   </div>
 </div>
 
-<!-- Settings Modal -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">▪ BRAND LIST 설정</div>
-    <div class="modal-desc">
-      엑셀에서 브랜드명 열을 복사해 붙여넣기하세요.<br>
-      <strong>한 줄에 하나씩</strong> — 탭·쉼표 구분도 자동 처리
-    </div>
-    <textarea class="modal-textarea" id="brandListInput"></textarea>
-    <div class="brand-count" id="brandCountLabel"></div>
-    <div class="modal-actions">
-      <button class="btn btn-cancel" id="btnModalCancel">취소</button>
-      <button class="btn btn-save" id="btnModalSave">저장</button>
+<!-- ── CONFIRM DIALOG ── -->
+<div class="confirm-overlay" id="confirmDialog">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirmIcon">📥</div>
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-msg" id="confirmMsg"></div>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" id="confirmCancel">취소</button>
+      <button class="btn-confirm-ok" id="confirmOk">확인</button>
     </div>
   </div>
 </div>
 
 <script>
-// ════════════════════════════════════════
-//  CONSTANTS
-// ════════════════════════════════════════
-const PRERENDER = 60;   // 미리 렌더할 행 수
-const EXTEND_AT = 10;   // 마지막 N행 이내면 추가 렌더
+// ══════════════════════════════════════════════════════════
+//  ★ 브랜드 약칭 규칙 (이 파일 수정 → 전원 자동 적용)
+// ══════════════════════════════════════════════════════════
+const BUILT_IN_ALIAS_TEXT = `나이, 나이키, 이키, nike = 나이키
+아디, 아디다, 다스, adidas = 아디다스
+폴로, 랄프, 랄프로렌 = 폴로 랄프로렌
+타미, 힐피거, tommy = 타미힐피거
+갭, gap = 갭
+리바이, 리바이스, levi = 리바이스
+캘빈, 클라인, ck = 캘빈클라인
+뉴발, 뉴발란스, nb = 뉴발란스
+컨버스, converse = 컨버스
+반스, vans = 반스
+노페, 노스페이스, north = 노스페이스
+파타, 파타고니아 = 파타고니아
+아크, 아크테릭스 = 아크테릭스
+콜럼비아, columbia = 콜럼비아
+몽클, 몽클레어 = 몽클레어
+버버리, burberry = 버버리
+구찌, gucci = 구찌
+프라다, prada = 프라다
+생로랑, ysl = 생로랑
+발렌, 발렌시아가 = 발렌시아가
+지방시, givenchy = 지방시
+셀린, 셀린느 = 셀린느
+막스, 막스마라 = 막스마라
+코치, coach = 코치
+마이클, 마코 = 마이클코어스
+마르니, marni = 마르니
+아크네, acne = 아크네
+메종, 마르지 = 메종마르지엘라
+오프, 오프화이트 = 오프화이트
+스톤, 스톤아일 = 스톤아일랜드
+아미, ami = 아미
+라코, 라코스테, lacoste = 라코스테
+프레드, 프레드페리 = 프레드페리
+챔피언, champion = 챔피언
+슈프림, supreme = 슈프림
+스투시, stussy = 스투시
+카하트, carhartt = 카하트
+딕키, 딕키즈 = 딕키즈
+빈폴 = 빈폴
+헤지스 = 헤지스
+유니클로, 유니 = 유니클로
+꼼데, 꼼데가르송 = 꼼데가르송
+사카이, sacai = 사카이
+니들즈, needles = 니들즈
+아더, 아더에러 = 아더에러
+커버낫, covernat = 커버낫
+마하, 마하그리드 = 마하그리드
+버즈, 버즈리크슨 = 버즈리크슨`;
 
-const DEFAULT_BRANDS = [
-  '폴로 랄프로렌','타미힐피거','갭','리바이스','캘빈클라인','나이키','아디다스',
-  '뉴발란스','컨버스','반스','노스페이스','파타고니아','아크테릭스','콜럼비아',
-  '마무트','피엘라벤','살로몬','몽클레어','버버리','구찌','프라다','생로랑',
-  '발렌시아가','지방시','셀린느','막스마라','코치','마이클코어스','마르니',
-  '아크네','이자벨마랑','메종마르지엘라','오프화이트','스톤아일랜드','CP컴퍼니',
-  '아미','토즈','베르사체','토리버치','케이트스페이드','피에르가르뎅','빈폴',
-  '헤지스','지오다노','유니클로','자라','H&M','COS','아더에러','스컬프터',
-  '마하그리드','디스이즈네버댓','커버낫','챔피언','슈프림','스투시','카하트',
-  '딕키즈','프레드페리','라코스테','브룩스브라더스','폴스미스',
-  '타오르','비즈빔','엔지니어드가먼츠','니들즈','사카이','꼼데가르송',
-];
+// ── Alias Engine ──
+let aliasMap = {};
 
-// ════════════════════════════════════════
-//  BRANDS
-// ════════════════════════════════════════
-let brands = [];
-function loadBrands() {
-  try { const s = localStorage.getItem('vshop_brands'); brands = s ? JSON.parse(s) : [...DEFAULT_BRANDS]; }
-  catch(e) { brands = [...DEFAULT_BRANDS]; }
+function parseAliasText(text) {
+  const map = {};
+  text.split('\n').forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('//') || line.startsWith('#')) return;
+    const eq = line.indexOf('=');
+    if (eq < 0) return;
+    const kws = line.slice(0, eq).split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    const canonical = line.slice(eq + 1).trim();
+    if (!canonical) return;
+    kws.forEach(k => { map[k] = canonical; });
+  });
+  return map;
 }
-function saveBrands() { localStorage.setItem('vshop_brands', JSON.stringify(brands)); }
-loadBrands();
 
-// ════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════
-// data[i] = { brand: string, price: number|null }
-// renderedCount = total DOM rows rendered
-// activeMax = highest row index user has visited (determines "future" dimming)
-let data = [];
-let renderedCount = 0;
-let activeMax = 0;
-let completedHangers = [];
-let brandTargetIndex = null;
+function resolveBrand(raw) {
+  if (!raw || !raw.trim()) return '';
+  const lower = raw.trim().toLowerCase();
+  if (aliasMap[lower]) return aliasMap[lower];
+  const keys = Object.keys(aliasMap).sort((a,b) => b.length - a.length);
+  for (const k of keys) { if (lower === k || lower.includes(k)) return aliasMap[k]; }
+  return raw.trim();
+}
 
-// ════════════════════════════════════════
-//  INIT / RESET
-// ════════════════════════════════════════
+function loadAliases() {
+  const builtIn = parseAliasText(BUILT_IN_ALIAS_TEXT);
+  try {
+    const ov = localStorage.getItem('vshop_alias_override');
+    aliasMap = ov ? { ...builtIn, ...parseAliasText(ov) } : builtIn;
+  } catch(e) { aliasMap = builtIn; }
+}
+
+loadAliases();
+
+// ── Parser ──
+function parseInput(val) {
+  val = (val || '').trim();
+  if (!val) return { brandRaw: '', price: null };
+  const parts = val.split(/\s+/);
+  const last = parts[parts.length - 1];
+  if (/^\d+$/.test(last)) return { brandRaw: parts.slice(0,-1).join(' '), price: parseInt(last,10)*1000 };
+  return { brandRaw: val, price: null };
+}
+
+// ── State ──
+const PRERENDER = 60, EXTEND_AT = 12, AUTOSAVE_KEY = 'vshop_session';
+let data = [], renderedCount = 0, activeMax = 0, completedHangers = [];
+let autoSaveTimer = null, hasUnsaved = false;
+
+// ── Auto-Save ──
+function scheduleAutoSave() {
+  hasUnsaved = true; setSaveDot('saving');
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(doAutoSave, 1200);
+}
+
+function doAutoSave() {
+  try {
+    const session = {
+      hangerNum: document.getElementById('hangerNum').value,
+      hangerCat: document.getElementById('hangerCat').value,
+      data: data.slice(0, Math.max(activeMax+2,1)).map(d=>({ raw: d.raw||'' })),
+      activeMax, completedHangers, savedAt: Date.now(),
+    };
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(session));
+    hasUnsaved = false; setSaveDot('saved');
+    const t = new Date();
+    document.getElementById('saveLabel').textContent =
+      `자동저장 ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
+    setTimeout(()=>{ if(!hasUnsaved) setSaveDot(''); }, 3000);
+  } catch(e) {
+    setSaveDot('');
+    document.getElementById('saveLabel').textContent = '저장 실패';
+  }
+}
+
+function setSaveDot(s) {
+  document.getElementById('saveDot').className = 'save-dot' + (s ? ` ${s}` : '');
+}
+
+function clearAutoSave() {
+  try { localStorage.removeItem(AUTOSAVE_KEY); } catch(e) {}
+  hasUnsaved = false; setSaveDot('');
+  document.getElementById('saveLabel').textContent = '자동저장 대기 중';
+}
+
+// ── Restore ──
+function tryRestore() {
+  try {
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if (!raw) return false;
+    const session = JSON.parse(raw);
+    if (!session?.data?.length) return false;
+    const filledCount = session.data.filter(d=>d.raw?.trim()).length;
+    const completedCount = (session.completedHangers||[]).length;
+    if (!filledCount && !completedCount) return false;
+
+    const elapsed = Date.now() - (session.savedAt||0);
+    const when = elapsed < 60000 ? '방금 전' : elapsed < 3600000 ? `${Math.floor(elapsed/60000)}분 전` : `${Math.floor(elapsed/3600000)}시간 전`;
+
+    document.getElementById('hangerNum').value = session.hangerNum||'';
+    document.getElementById('hangerCat').value = session.hangerCat||'';
+    completedHangers = session.completedHangers||[];
+    data=[]; renderedCount=0; activeMax=session.activeMax||0;
+    document.getElementById('itemsList').innerHTML='';
+
+    renderRows(Math.max(session.data.length, PRERENDER));
+
+    session.data.forEach((d,i) => {
+      if (!d.raw) return;
+      const row = document.querySelector(`.item-row[data-i="${i}"]`);
+      if (!row) return;
+      const input = row.querySelector('.combo-input');
+      if (input) { input.value = d.raw; input.dispatchEvent(new Event('input')); }
+    });
+
+    document.querySelectorAll('.item-row').forEach(r => {
+      if (parseInt(r.dataset.i) <= activeMax) r.classList.remove('future');
+    });
+
+    renderCompleted(); updateStats();
+
+    const banner = document.getElementById('restoreBanner');
+    let msg = `<span class="restore-text">💾 <strong>${when}</strong> 작업 불러옴`;
+    if (completedCount) msg += ` — 완료 ${completedCount}개 행거`;
+    if (filledCount)    msg += `, 현재 ${filledCount}개 입력`;
+    msg += `</span>`;
+    banner.innerHTML = `<div class="restore-banner">${msg}<button class="btn-restore-dismiss" id="btnRestoreDismiss">확인</button></div>`;
+    banner.style.display = 'block';
+    document.getElementById('btnRestoreDismiss').addEventListener('click', ()=>{ banner.style.display='none'; });
+    return true;
+  } catch(e) { return false; }
+}
+
+// ── Init ──
 function resetCurrentHanger() {
-  data = [];
-  renderedCount = 0;
-  activeMax = 0;
-  document.getElementById('itemsList').innerHTML = '';
-  renderRows(PRERENDER);
-  updateStats();
-  // 첫 행 포커스 (사용자 탭으로 열기 전까지는 포커스만)
-  setTimeout(() => {
-    const first = document.querySelector('.price-input');
-    if (first) first.focus();
-  }, 120);
+  data=[]; renderedCount=0; activeMax=0;
+  document.getElementById('itemsList').innerHTML='';
+  renderRows(PRERENDER); updateStats();
+  setTimeout(()=>{ const f=document.querySelector('.combo-input'); if(f) f.focus(); }, 120);
+  scheduleAutoSave();
 }
 
-// ════════════════════════════════════════
-//  RENDER ROWS (batch)
-// ════════════════════════════════════════
+// ── Render Rows ──
 function renderRows(count) {
   const list = document.getElementById('itemsList');
-  for (let i = 0; i < count; i++) {
+  for (let i=0; i<count; i++) {
     const index = renderedCount;
-    data.push({ brand: '', price: null });
+    if (data.length <= index) data.push({ raw:'', brandRaw:'', price:null });
 
     const row = document.createElement('div');
     row.className = 'item-row future';
     row.dataset.i = index;
 
     row.innerHTML = `
-      <span class="item-num">${index + 1}</span>
-      <button class="brand-tag" type="button" tabindex="-1">
-        <span class="brand-tag-inner">+</span>
-      </button>
-      <input class="price-input" type="text" inputmode="numeric"
-        placeholder="가격" autocomplete="off" autocorrect="off">
-    `;
+      <span class="item-num">${index+1}</span>
+      <input class="combo-input" type="text" inputmode="text"
+        placeholder="${index===0 ? '예: 나이 34  또는  25' : ''}"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <div class="parse-badge">
+        <div class="parse-inner">
+          <span class="badge-price"></span>
+          <span class="badge-brand"></span>
+        </div>
+      </div>`;
 
-    const priceInput = row.querySelector('.price-input');
-    const brandBtn   = row.querySelector('.brand-tag');
+    const input = row.querySelector('.combo-input');
+    const bp    = row.querySelector('.badge-price');
+    const bb    = row.querySelector('.badge-brand');
 
-    brandBtn.addEventListener('click', () => openBrandSheet(index));
+    input.addEventListener('focus', () => onFocus(index));
 
-    priceInput.addEventListener('focus', () => onPriceFocus(index));
-    priceInput.addEventListener('input', () => onPriceInput(index));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // 다음 행으로 포커스 이동
+        const next = document.querySelector(`.item-row[data-i="${index + 1}"] .combo-input`);
+        if (next) next.focus();
+      }
+    });
+
+    input.addEventListener('input', () => {
+      const parsed = parseInput(input.value);
+      if (!data[index]) data[index] = {};
+      data[index].raw = input.value;
+      data[index].brandRaw = parsed.brandRaw;
+      data[index].price = parsed.price;
+      if (parsed.price !== null) {
+        bp.textContent = (parsed.price/1000)+'K';
+        const res = resolveBrand(parsed.brandRaw);
+        bb.textContent = res||'';
+        row.classList.add('has-data');
+        row.classList.toggle('has-brand', !!(res && parsed.brandRaw));
+      } else {
+        bp.textContent=''; bb.textContent='';
+        row.classList.remove('has-data','has-brand');
+      }
+      updateStats(); scheduleAutoSave();
+    });
 
     list.appendChild(row);
     renderedCount++;
   }
 }
 
-// ════════════════════════════════════════
-//  PRICE EVENTS
-// ════════════════════════════════════════
-function onPriceFocus(index) {
+function onFocus(index) {
   if (index > activeMax) activeMax = index;
-
-  // 현재 행 강조, 이전 행 일반화
   document.querySelectorAll('.item-row').forEach(r => {
     r.classList.remove('current');
-    const i = parseInt(r.dataset.i);
-    if (i <= activeMax) r.classList.remove('future');
-    else r.classList.add('future');
+    parseInt(r.dataset.i) <= activeMax ? r.classList.remove('future') : r.classList.add('future');
   });
-
   const row = document.querySelector(`.item-row[data-i="${index}"]`);
-  if (row) row.classList.add('current');
-
-  // 마지막 EXTEND_AT 행 이내면 추가 렌더
-  if (renderedCount - index <= EXTEND_AT) {
-    renderRows(PRERENDER);
-  }
-
-  // 스크롤
-  row && row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  updateStats();
+  if (row) { row.classList.add('current'); row.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+  if (renderedCount - index <= EXTEND_AT) renderRows(PRERENDER);
+  updateStats(); scheduleAutoSave();
 }
 
-function onPriceInput(index) {
-  const row = document.querySelector(`.item-row[data-i="${index}"]`);
-  if (!row) return;
-  const raw = row.querySelector('.price-input').value.replace(/[^0-9]/g, '');
-  data[index].price = raw ? parseInt(raw, 10) : null;
-  updateStats();
-}
-
-// ════════════════════════════════════════
-//  STATS
-// ════════════════════════════════════════
 function updateStats() {
-  // "입력된" 행 = 가격 있거나 activeMax 이하이면서 방문한 행
-  const visited = data.slice(0, activeMax + 1);
-  const filled  = visited.filter(d => d.price != null);
-  document.getElementById('sNow').textContent = filled.length;
-
-  const total = completedHangers.reduce((s,h) => s + h.items.length, 0) + filled.length;
+  const filled = data.slice(0, activeMax+1).filter(d=>d?.price!==null && d?.price!==undefined);
+  document.getElementById('sNow').textContent   = filled.length;
+  const total = completedHangers.reduce((s,h)=>s+h.items.length,0)+filled.length;
   document.getElementById('sTotal').textContent = total;
-  document.getElementById('sDone').textContent = completedHangers.length;
-
-  const canComplete = filled.length > 0
+  document.getElementById('sDone').textContent  = completedHangers.length;
+  const can = filled.length>0
     && document.getElementById('hangerNum').value.trim()
     && document.getElementById('hangerCat').value.trim();
-  document.getElementById('btnComplete').disabled = !canComplete;
+  document.getElementById('btnComplete').disabled = !can;
 }
 
-// ════════════════════════════════════════
-//  BRAND TAG
-// ════════════════════════════════════════
-function updateBrandTag(index) {
-  const row = document.querySelector(`.item-row[data-i="${index}"]`);
-  if (!row) return;
-  const brand = data[index]?.brand || '';
-  const tag = row.querySelector('.brand-tag');
-  tag.querySelector('.brand-tag-inner').textContent = brand || '+';
-  if (brand) { tag.classList.add('has-value'); row.classList.add('has-brand'); }
-  else        { tag.classList.remove('has-value'); row.classList.remove('has-brand'); }
-}
-
-// ════════════════════════════════════════
-//  BRAND SHEET
-// ════════════════════════════════════════
-function openBrandSheet(rowIndex) {
-  brandTargetIndex = rowIndex;
-  const existing = data[rowIndex]?.brand || '';
-  document.getElementById('brandSearch').value = existing;
-  renderBrandSuggestions(existing);
-  document.getElementById('brandSheet').classList.add('open');
-  setTimeout(() => document.getElementById('brandSearch').focus(), 220);
-}
-
-function closeBrandSheet() {
-  document.getElementById('brandSheet').classList.remove('open');
-  const idx = brandTargetIndex;
-  brandTargetIndex = null;
-  setTimeout(() => {
-    const target = document.querySelector(`.item-row[data-i="${idx ?? activeMax}"] .price-input`);
-    if (target) target.focus();
-  }, 260);
-}
-
-function renderBrandSuggestions(query) {
-  const el = document.getElementById('brandSuggestions');
-  el.innerHTML = '';
-  const list = query.trim()
-    ? brands.filter(b => b.includes(query) || b.toLowerCase().includes(query.toLowerCase())).slice(0, 8)
-    : brands.slice(0, 10);
-  if (!list.length && query.trim()) {
-    const none = document.createElement('div');
-    none.style.cssText = 'padding:11px 13px;font-size:12px;color:var(--text-muted)';
-    none.textContent = '직접 입력한 내용으로 저장됩니다';
-    el.appendChild(none);
-  } else {
-    list.forEach(b => {
-      const d = document.createElement('div');
-      d.className = 'brand-sug-item';
-      d.textContent = b;
-      d.addEventListener('click', () => confirmBrand(b));
-      el.appendChild(d);
-    });
-  }
-}
-
-function confirmBrand(brand) {
-  if (brandTargetIndex === null) return;
-  data[brandTargetIndex].brand = brand;
-  updateBrandTag(brandTargetIndex);
-  closeBrandSheet();
-}
-
-document.getElementById('brandSearch').addEventListener('input', e => renderBrandSuggestions(e.target.value));
-document.getElementById('brandSearch').addEventListener('keydown', e => {
-  if (e.key === 'Enter') { e.preventDefault(); confirmBrand(document.getElementById('brandSearch').value.trim()); }
-});
-document.getElementById('btnBrandConfirm').addEventListener('click', () =>
-  confirmBrand(document.getElementById('brandSearch').value.trim())
-);
-document.getElementById('btnBrandClear').addEventListener('click', () => {
-  if (brandTargetIndex !== null) { data[brandTargetIndex].brand = ''; updateBrandTag(brandTargetIndex); }
-  closeBrandSheet();
-});
-document.getElementById('brandBackdrop').addEventListener('click', closeBrandSheet);
-
-// ════════════════════════════════════════
-//  HANGER COMPLETE
-// ════════════════════════════════════════
+// ── Hanger Complete ──
 document.getElementById('btnComplete').addEventListener('click', () => {
   const num = document.getElementById('hangerNum').value.trim();
   const cat = document.getElementById('hangerCat').value.trim();
-  if (!num || !cat) { showToast('행거 번호와 카테고리를 입력해주세요'); return; }
-
-  const validItems = data.slice(0, activeMax + 1).filter(d => d.price != null);
+  if (!num||!cat) { showToast('행거 번호와 카테고리를 입력해주세요','warn'); return; }
+  const validItems = data.slice(0,activeMax+1).filter(d=>d?.price!=null)
+    .map(d=>({ brandRaw:d.brandRaw||'', brand:resolveBrand(d.brandRaw||''), price:d.price }));
   if (!validItems.length) return;
-
-  completedHangers.push({ hangerNum: num, category: cat, items: validItems });
+  completedHangers.push({ hangerNum:num, category:cat, items:validItems });
   showToast(`${num}번 행거 완료 — ${validItems.length}벌`, 'ok');
   renderCompleted();
-
-  document.getElementById('hangerNum').value = '';
-  document.getElementById('hangerCat').value = '';
+  document.getElementById('hangerNum').value='';
+  document.getElementById('hangerCat').value='';
   resetCurrentHanger();
 });
 
 function renderCompleted() {
-  const sec = document.getElementById('completedSection');
+  const sec  = document.getElementById('completedSection');
   const list = document.getElementById('completedList');
-  if (!completedHangers.length) { sec.style.display = 'none'; return; }
-  sec.style.display = 'block';
-  list.innerHTML = '';
+  if (!completedHangers.length) { sec.style.display='none'; return; }
+  sec.style.display='block'; list.innerHTML='';
   [...completedHangers].reverse().forEach(h => {
-    const wb = h.items.filter(i => i.brand).length;
+    const wb = h.items.filter(i=>i.brand).length;
     const d = document.createElement('div');
-    d.className = 'completed-hanger';
-    d.innerHTML = `
+    d.className='completed-hanger';
+    d.innerHTML=`
       <div>
-        <div class="ch-id">RACK ${h.hangerNum}</div>
-        <div class="ch-meta">${h.category}${wb ? ` · 브랜드 ${wb}개` : ''}</div>
+        <div class="ch-id">Rack ${h.hangerNum}</div>
+        <div class="ch-meta">${h.category}${wb?` · 브랜드 ${wb}개`:''}</div>
       </div>
-      <span class="ch-count">${h.items.length}</span>
-    `;
+      <span class="ch-count">${h.items.length}</span>`;
     list.appendChild(d);
   });
   updateStats();
 }
 
-// ════════════════════════════════════════
-//  EXCEL
-// ════════════════════════════════════════
+// ── Download ──
 document.getElementById('btnDownload').addEventListener('click', () => {
-  const rows = [];
-  let seq = 1;
-
-  completedHangers.forEach(h => {
-    h.items.forEach(item => rows.push({
-      '행거번호': h.hangerNum, '순번': seq++,
-      '브랜드': item.brand || '', '카테고리': h.category, '가격': item.price
-    }));
+  const totalFilled = completedHangers.reduce((s,h)=>s+h.items.length,0)
+    + data.slice(0,activeMax+1).filter(d=>d?.price!=null).length;
+  if (!totalFilled) { showToast('입력된 데이터가 없어요','warn'); return; }
+  showConfirm({
+    icon:'📥', title:'Excel 다운로드',
+    msg:`총 ${totalFilled}건을 저장합니다.\n저장 후 팀장에게 전송하세요.`,
+    okText:'다운로드', onOk:doDownload,
   });
+});
 
-  const num = document.getElementById('hangerNum').value.trim();
-  const cat = document.getElementById('hangerCat').value.trim();
-  if (num && cat) {
-    data.slice(0, activeMax + 1).filter(d => d.price).forEach(item => {
-      rows.push({ '행거번호': `${num}(진행중)`, '순번': seq++, '브랜드': item.brand||'', '카테고리': cat, '가격': item.price });
+function doDownload() {
+  const rows=[]; let seq=1;
+  completedHangers.forEach(h=>{
+    h.items.forEach(item=>rows.push({ '행거번호':h.hangerNum,'순번':seq++,'브랜드(원문)':item.brandRaw,'브랜드(변환)':item.brand,'카테고리':h.category,'가격':item.price }));
+  });
+  const num=document.getElementById('hangerNum').value.trim();
+  const cat=document.getElementById('hangerCat').value.trim();
+  if (num&&cat) {
+    data.slice(0,activeMax+1).filter(d=>d?.price!=null).forEach(d=>{
+      rows.push({ '행거번호':`${num}(진행중)`,'순번':seq++,'브랜드(원문)':d.brandRaw||'','브랜드(변환)':resolveBrand(d.brandRaw||''),'카테고리':cat,'가격':d.price });
     });
   }
-
-  if (!rows.length) { showToast('입력된 데이터가 없어요'); return; }
-
-  const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{ wch:12 },{ wch:8 },{ wch:22 },{ wch:13 },{ wch:10 }];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, '신규입고');
-  const d = new Date();
-  const ds = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  XLSX.writeFile(wb, `입고_${ds}.xlsx`);
-  showToast(`${rows.length}건 다운로드`, 'ok');
-});
-
-// ════════════════════════════════════════
-//  SETTINGS
-// ════════════════════════════════════════
-document.getElementById('btnSettings').addEventListener('click', () => {
-  document.getElementById('brandListInput').value = brands.join('\n');
-  updateBrandCount();
-  document.getElementById('modalOverlay').classList.add('open');
-});
-document.getElementById('brandListInput').addEventListener('input', updateBrandCount);
-function updateBrandCount() {
-  const n = document.getElementById('brandListInput').value.split(/[\n,\t]/).map(s=>s.trim()).filter(Boolean).length;
-  document.getElementById('brandCountLabel').textContent = `${n}개 브랜드`;
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=[{wch:10},{wch:7},{wch:14},{wch:18},{wch:12},{wch:10}];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'신규입고');
+  const d=new Date();
+  const ds=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  XLSX.writeFile(wb,`입고_${ds}.xlsx`);
+  clearAutoSave(); completedHangers=[];
+  document.getElementById('hangerNum').value='';
+  document.getElementById('hangerCat').value='';
+  resetCurrentHanger(); renderCompleted();
+  document.getElementById('restoreBanner').style.display='none';
+  showToast(`${rows.length}건 저장 완료`,'ok');
 }
-document.getElementById('btnModalSave').addEventListener('click', () => {
-  brands = [...new Set(document.getElementById('brandListInput').value.split(/[\n,\t]/).map(s=>s.trim()).filter(Boolean))];
-  saveBrands();
-  document.getElementById('modalOverlay').classList.remove('open');
-  showToast(`브랜드 ${brands.length}개 저장됨`, 'ok');
-});
-document.getElementById('btnModalCancel').addEventListener('click', () => document.getElementById('modalOverlay').classList.remove('open'));
-document.getElementById('modalOverlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open');
-});
-['hangerNum','hangerCat'].forEach(id => document.getElementById(id).addEventListener('input', updateStats));
 
-// ════════════════════════════════════════
-//  TOAST
-// ════════════════════════════════════════
+// ── Alias Sheet ──
+document.getElementById('btnAliases').addEventListener('click',()=>{
+  document.getElementById('aliasTa').value=localStorage.getItem('vshop_alias_override')||'';
+  updateAliasCount(document.getElementById('aliasTa').value);
+  document.getElementById('aliasSheet').classList.add('open');
+});
+document.getElementById('aliasTa').addEventListener('input',e=>updateAliasCount(e.target.value));
+function updateAliasCount(text) {
+  const n=text.split('\n').filter(l=>l.trim()&&l.includes('=')).length;
+  document.getElementById('aliasCount').textContent=n?`이 기기 오버라이드 ${n}개`:'비어있으면 내장 규칙만 사용';
+}
+document.getElementById('btnAliasSave').addEventListener('click',()=>{
+  const text=document.getElementById('aliasTa').value.trim();
+  try { text?localStorage.setItem('vshop_alias_override',text):localStorage.removeItem('vshop_alias_override'); } catch(e){}
+  loadAliases(); document.getElementById('aliasSheet').classList.remove('open');
+  document.querySelectorAll('.item-row').forEach(row=>{
+    const i=parseInt(row.dataset.i); const d=data[i];
+    if(!d||d.price==null) return;
+    const badge=row.querySelector('.badge-brand');
+    if(badge) badge.textContent=resolveBrand(d.brandRaw||'')||'';
+  });
+  showToast('규칙 저장 완료','ok');
+});
+document.getElementById('btnAliasReset').addEventListener('click',()=>{
+  document.getElementById('aliasTa').value=''; updateAliasCount('');
+  showToast('저장 누르면 내장 규칙으로 돌아가요','info');
+});
+document.getElementById('btnAliasCancel').addEventListener('click',()=>document.getElementById('aliasSheet').classList.remove('open'));
+document.getElementById('aliasBackdrop').addEventListener('click',()=>document.getElementById('aliasSheet').classList.remove('open'));
+
+// ── Confirm ──
+let confirmCallback=null;
+function showConfirm({icon,title,msg,okText='확인',onOk}) {
+  document.getElementById('confirmIcon').textContent=icon||'⚠️';
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmMsg').textContent=msg;
+  document.getElementById('confirmOk').textContent=okText;
+  confirmCallback=onOk;
+  document.getElementById('confirmDialog').classList.add('open');
+}
+document.getElementById('confirmOk').addEventListener('click',()=>{
+  document.getElementById('confirmDialog').classList.remove('open');
+  if(confirmCallback){confirmCallback();confirmCallback=null;}
+});
+document.getElementById('confirmCancel').addEventListener('click',()=>{
+  document.getElementById('confirmDialog').classList.remove('open');
+  confirmCallback=null;
+});
+
+// ── Before Unload ──
+window.addEventListener('beforeunload',e=>{
+  const filled=data.slice(0,activeMax+1).filter(d=>d?.price!=null).length;
+  if(completedHangers.length+filled>0){e.preventDefault();e.returnValue='';}
+});
+
+['hangerNum','hangerCat'].forEach(id=>
+  document.getElementById(id).addEventListener('input',()=>{updateStats();scheduleAutoSave();})
+);
+
+// ── Toast ──
 let toastTimer;
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (type ? ` ${type}` : '');
+function showToast(msg,type='') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(type?` ${type}`:'');
   clearTimeout(toastTimer);
-  requestAnimationFrame(() => {
+  requestAnimationFrame(()=>{
     t.classList.add('show');
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+    toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
   });
 }
 
-// ════════════════════════════════════════
-//  INIT
-// ════════════════════════════════════════
-resetCurrentHanger();
+// ── Start ──
+if (!tryRestore()) resetCurrentHanger();
 </script>
 </body>
 </html>
