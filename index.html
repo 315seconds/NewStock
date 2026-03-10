@@ -3,55 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>입고 입력기</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>입고 입력기 — marketinu</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #F0EBE1;
-      --bg2:         #EAE3D6;
-      --surface:     #E6DFD0;
-      --surface2:    #DDD5C4;
-      --green:       #1E3A32;
-      --green-mid:   #2D5446;
-      --green-light: rgba(30,58,50,0.08);
-      --green-dim:   rgba(30,58,50,0.14);
-      --salmon:      #E8A090;
-      --border:      rgba(30,58,50,0.14);
-      --border-mid:  rgba(30,58,50,0.24);
-      --text:        #1A2E28;
-      --text-dim:    #5A7268;
-      --text-muted:  #9AB0A8;
-      --success:     #2D7A50;
-      --warn:        #B87A30;
-      --info:        #2A5A8A;
-      --font-serif:  'DM Serif Display', serif;
-      --font-sans:   'DM Sans', 'Noto Sans KR', sans-serif;
-      --font-mono:   'Space Mono', monospace;
-      --r:           10px;
+      --paper:      #F4EDD8;
+      --paper2:     #EDE4C8;
+      --paper3:     #E2D6B0;
+      --ink:        #1C1408;
+      --ink-mid:    #4A3820;
+      --ink-dim:    #7A6448;
+      --ink-muted:  #B09870;
+      --olive:      #3D4A28;
+      --olive-mid:  #566638;
+      --olive-lt:   rgba(61,74,40,0.1);
+      --rust:       #8C3A1A;
+      --amber:      #B87018;
+      --border:     rgba(28,20,8,0.15);
+      --border-mid: rgba(28,20,8,0.28);
+      --font-serif: 'DM Serif Display', Georgia, serif;
+      --font-kr:    'Noto Sans KR', sans-serif;
+      --font-mono:  'Space Mono', monospace;
+      --r: 6px;
     }
 
     html, body { height: 100%; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-sans);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-kr);
       max-width: 480px;
       margin: 0 auto;
-      padding-bottom: 96px;
+      padding-bottom: 88px;
       -webkit-font-smoothing: antialiased;
       min-height: 100%;
     }
 
-    /* ══════════════════════════════
-       HEADER
-    ══════════════════════════════ */
     .app-header {
-      background: var(--green);
-      padding: 18px 18px 20px;
+      background: var(--olive);
+      padding: 16px 16px 18px;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -59,65 +53,53 @@
 
     .header-top {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .app-name {
       font-family: var(--font-serif);
-      font-size: 22px;
-      color: var(--bg);
-      letter-spacing: -0.01em;
+      font-size: 20px;
+      color: var(--paper);
     }
 
-    .app-version {
+    .app-brand {
       font-family: var(--font-mono);
       font-size: 9px;
-      color: rgba(240,235,225,0.38);
-      letter-spacing: 0.14em;
+      color: rgba(244,237,216,0.42);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
     }
 
-    /* 사용법 */
     .usage-box {
-      background: rgba(240,235,225,0.09);
-      border: 1px solid rgba(240,235,225,0.16);
+      background: rgba(244,237,216,0.1);
+      border: 1px solid rgba(244,237,216,0.2);
       border-radius: var(--r);
-      padding: 11px 14px;
-      margin-bottom: 14px;
+      padding: 10px 13px;
+      margin-bottom: 13px;
       font-size: 12px;
-      line-height: 1.7;
-      color: rgba(240,235,225,0.6);
-      font-family: var(--font-sans);
+      line-height: 1.65;
+      color: rgba(244,237,216,0.62);
       font-weight: 300;
     }
 
-    .usage-box strong {
-      color: rgba(240,235,225,0.9);
-      font-weight: 500;
-    }
-
-    .usage-examples {
-      margin-top: 7px;
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .usage-box strong { color: rgba(244,237,216,0.92); font-weight: 500; }
+    .usage-examples { margin-top: 7px; display: flex; gap: 5px; flex-wrap: wrap; }
 
     .ex-chip {
-      background: rgba(240,235,225,0.13);
-      border: 1px solid rgba(240,235,225,0.22);
+      background: rgba(244,237,216,0.14);
+      border: 1px solid rgba(244,237,216,0.26);
       border-radius: 100px;
-      padding: 3px 10px;
+      padding: 3px 11px;
       font-family: var(--font-mono);
       font-size: 11px;
-      color: rgba(240,235,225,0.8);
+      color: rgba(244,237,216,0.85);
     }
 
-    /* 행거 설정 */
     .hanger-setup {
       display: grid;
-      grid-template-columns: 90px 1fr;
+      grid-template-columns: 88px 1fr;
       gap: 8px;
     }
 
@@ -125,44 +107,38 @@
       display: block;
       font-family: var(--font-mono);
       font-size: 8px;
-      color: rgba(240,235,225,0.4);
-      letter-spacing: 0.18em;
+      color: rgba(244,237,216,0.42);
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-bottom: 5px;
     }
 
     .setup-input {
       width: 100%;
-      background: rgba(240,235,225,0.1);
-      border: 1px solid rgba(240,235,225,0.2);
-      border-radius: 8px;
-      color: var(--bg);
-      font-family: var(--font-sans);
-      font-size: 15px;
+      background: rgba(244,237,216,0.12);
+      border: 1px solid rgba(244,237,216,0.25);
+      border-radius: var(--r);
+      color: var(--paper);
+      font-family: var(--font-kr);
+      font-size: 16px;
       font-weight: 400;
-      padding: 10px 13px;
+      padding: 10px 12px;
       outline: none;
       -webkit-appearance: none;
       transition: border-color 0.15s, background 0.15s;
     }
 
     .setup-input:focus {
-      border-color: rgba(240,235,225,0.5);
-      background: rgba(240,235,225,0.15);
+      border-color: rgba(244,237,216,0.55);
+      background: rgba(244,237,216,0.18);
     }
 
-    .setup-input::placeholder {
-      color: rgba(240,235,225,0.25);
-      font-size: 13px;
-    }
+    .setup-input::placeholder { color: rgba(244,237,216,0.28); font-size: 13px; }
 
-    /* ══════════════════════════════
-       STATS
-    ══════════════════════════════ */
     .stats-bar {
       display: flex;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
+      background: var(--paper2);
+      border-bottom: 1.5px solid var(--paper3);
     }
 
     .stat-item {
@@ -171,103 +147,92 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 11px 0;
+      padding: 11px 0 10px;
       gap: 2px;
-      border-right: 1px solid var(--border);
+      border-right: 1px solid var(--paper3);
     }
 
     .stat-item:last-child { border-right: none; }
 
     .stat-num {
       font-family: var(--font-serif);
-      font-size: 24px;
-      color: var(--green);
+      font-size: 26px;
+      color: var(--olive);
       line-height: 1;
-      letter-spacing: -0.02em;
     }
 
     .stat-label {
       font-size: 9px;
-      color: var(--text-muted);
+      color: var(--ink-muted);
       font-family: var(--font-mono);
       letter-spacing: 0.06em;
     }
 
-    /* ══════════════════════════════
-       AUTOSAVE BAR
-    ══════════════════════════════ */
     .save-bar {
-      padding: 5px 16px;
+      padding: 5px 15px;
       font-family: var(--font-mono);
       font-size: 9px;
-      color: var(--text-muted);
-      letter-spacing: 0.07em;
+      color: var(--ink-muted);
+      letter-spacing: 0.06em;
       display: flex;
       align-items: center;
       gap: 6px;
       border-bottom: 1px solid var(--border);
-      background: var(--bg2);
+      background: var(--paper2);
     }
 
     .save-dot {
       width: 5px; height: 5px;
       border-radius: 50%;
-      background: var(--text-muted);
+      background: var(--ink-muted);
       flex-shrink: 0;
       transition: background 0.3s;
     }
 
-    .save-dot.saving { background: var(--warn); }
-    .save-dot.saved  { background: var(--success); }
+    .save-dot.saving { background: var(--amber); }
+    .save-dot.saved  { background: var(--olive-mid); }
 
-    /* ══════════════════════════════
-       RESTORE BANNER
-    ══════════════════════════════ */
     .restore-banner {
-      background: rgba(42,90,138,0.08);
-      border: 1px solid rgba(42,90,138,0.2);
-      border-radius: 8px;
-      margin: 10px 16px 0;
-      padding: 11px 14px;
+      background: var(--olive-lt);
+      border: 1px solid rgba(61,74,40,0.22);
+      border-radius: var(--r);
+      margin: 10px 14px 0;
+      padding: 11px 13px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
     }
 
-    .restore-text { font-size: 12px; color: var(--info); line-height: 1.45; }
-    .restore-text strong { font-weight: 500; }
+    .restore-text { font-size: 12px; color: var(--olive-mid); line-height: 1.45; }
+    .restore-text strong { font-weight: 700; color: var(--olive); }
 
     .btn-restore-dismiss {
       background: none;
-      border: 1px solid rgba(42,90,138,0.3);
+      border: 1px solid rgba(61,74,40,0.3);
       border-radius: 100px;
-      color: var(--info);
-      font-family: var(--font-sans);
+      color: var(--olive-mid);
+      font-family: var(--font-kr);
       font-size: 11px;
-      padding: 4px 12px;
+      padding: 5px 12px;
       cursor: pointer;
       flex-shrink: 0;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ══════════════════════════════
-       LIST
-    ══════════════════════════════ */
     .items-list {
-      padding: 10px 16px;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
       gap: 5px;
     }
 
-    /* ══════════════════════════════
-       ROW
-    ══════════════════════════════ */
     .item-row {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: 7px;
-      height: 48px;
+      height: 50px;
       transition: opacity 0.2s;
     }
 
@@ -276,134 +241,117 @@
     .item-num {
       font-family: var(--font-mono);
       font-size: 10px;
-      color: var(--text-muted);
+      color: var(--ink-muted);
       width: 22px;
       flex-shrink: 0;
       text-align: right;
       user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
       transition: color 0.15s;
     }
 
-    .item-row.has-data  .item-num { color: var(--text-dim); }
-    .item-row.has-brand .item-num { color: var(--green-mid); font-weight: 700; }
+    .item-row.has-data  .item-num { color: var(--ink-dim); }
+    .item-row.has-brand .item-num { color: var(--olive); font-weight: 700; }
 
-    /* 입력칸 */
     .combo-input {
       flex: 1;
+      min-width: 0;
       background: white;
-      border: 1px solid var(--border-mid);
-      border-radius: 9px;
-      color: var(--text);
+      border: 1.5px solid var(--border-mid);
+      border-radius: var(--r);
+      color: var(--ink);
       font-family: var(--font-mono);
-      font-size: 15px;
-      padding: 0 13px;
-      height: 100%;
+      font-size: 16px;
+      padding: 0 12px;
       outline: none;
       -webkit-appearance: none;
       transition: border-color 0.15s, box-shadow 0.15s;
+      height: 100%;
     }
 
     .combo-input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px var(--green-light);
+      border-color: var(--olive);
+      box-shadow: 0 0 0 3px var(--olive-lt);
     }
 
     .combo-input::placeholder {
-      color: var(--text-muted);
+      color: var(--ink-muted);
       font-size: 12px;
-      font-family: var(--font-sans);
+      font-family: var(--font-kr);
       font-weight: 300;
     }
 
-    /* 미리보기 */
     .parse-badge {
+      width: 64px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
-      min-width: 56px;
-      height: 100%;
+      justify-content: flex-end;
     }
 
     .parse-inner {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 1px;
+      gap: 2px;
     }
 
     .badge-price {
       font-family: var(--font-serif);
-      font-size: 16px;
-      color: var(--success);
+      font-size: 17px;
+      color: var(--amber);
       line-height: 1;
-      letter-spacing: -0.02em;
+      white-space: nowrap;
     }
 
     .badge-brand {
       font-size: 9px;
-      color: var(--green-mid);
-      max-width: 76px;
+      color: var(--rust);
+      width: 64px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       text-align: right;
       font-family: var(--font-mono);
-      letter-spacing: 0.02em;
     }
 
-    /* ══════════════════════════════
-       COMPLETED
-    ══════════════════════════════ */
-    .completed-section { margin: 4px 16px 0; }
+    .completed-section { margin: 6px 14px 0; }
 
     .section-title {
       font-family: var(--font-mono);
       font-size: 9px;
       letter-spacing: 0.2em;
-      color: var(--text-muted);
+      color: var(--ink-muted);
       text-transform: uppercase;
-      padding: 14px 0 8px;
-      border-top: 1px solid var(--border-mid);
+      padding: 13px 0 8px;
+      border-top: 1.5px solid var(--paper3);
     }
 
     .completed-hanger {
       background: white;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: var(--r);
-      padding: 12px 16px;
+      padding: 11px 14px;
       margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .ch-id {
-      font-family: var(--font-serif);
-      font-size: 15px;
-      color: var(--green);
-      letter-spacing: -0.01em;
-    }
+    .ch-id { font-family: var(--font-serif); font-size: 15px; color: var(--olive); }
+    .ch-meta { font-size: 11px; color: var(--ink-dim); margin-top: 3px; font-weight: 300; }
+    .ch-count { font-family: var(--font-serif); font-size: 30px; color: var(--amber); }
 
-    .ch-meta { font-size: 11px; color: var(--text-dim); margin-top: 3px; font-weight: 300; }
-
-    .ch-count {
-      font-family: var(--font-serif);
-      font-size: 28px;
-      color: var(--success);
-      letter-spacing: -0.03em;
-    }
-
-    /* ══════════════════════════════
-       BOTTOM BAR
-    ══════════════════════════════ */
     .bottom-bar {
       position: fixed;
-      bottom: 0; left: 50%;
-      transform: translateX(-50%);
+      bottom: 0; left: 0; right: 0;
       width: 100%; max-width: 480px;
-      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-      background: var(--bg);
-      border-top: 1px solid var(--border-mid);
+      margin: 0 auto;
+      padding: 11px 14px calc(11px + env(safe-area-inset-bottom));
+      background: var(--paper2);
+      border-top: 1.5px solid var(--paper3);
       display: flex;
       gap: 8px;
       z-index: 99;
@@ -412,42 +360,36 @@
     .btn {
       border: none;
       border-radius: var(--r);
-      font-family: var(--font-sans);
+      font-family: var(--font-kr);
       font-size: 14px;
       font-weight: 500;
       padding: 14px 10px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      transition: transform 0.12s, filter 0.12s;
+      touch-action: manipulation;
+      transition: transform 0.1s, filter 0.1s;
     }
 
-    .btn:active { transform: scale(0.96); filter: brightness(0.94); }
+    .btn:active { transform: scale(0.96); filter: brightness(0.9); }
 
     .btn-complete {
-      background: var(--green);
-      color: var(--bg);
+      background: var(--olive);
+      color: var(--paper);
       flex: 1;
       font-family: var(--font-serif);
       font-size: 17px;
-      letter-spacing: -0.01em;
     }
 
-    .btn-complete:disabled {
-      background: var(--surface2);
-      color: var(--text-muted);
-    }
+    .btn-complete:disabled { background: var(--paper3); color: var(--ink-muted); }
 
     .btn-icon {
       background: white;
-      color: var(--text-dim);
-      border: 1px solid var(--border-mid);
+      color: var(--ink-dim);
+      border: 1.5px solid var(--border-mid);
       padding: 14px 15px;
-      font-size: 17px;
+      font-size: 18px;
     }
 
-    /* ══════════════════════════════
-       BOTTOM SHEETS
-    ══════════════════════════════ */
     .sheet-overlay {
       position: fixed; inset: 0;
       z-index: 300;
@@ -462,17 +404,17 @@
 
     .sheet-backdrop {
       position: absolute; inset: 0;
-      background: rgba(26,46,40,0.55);
-      backdrop-filter: blur(2px);
+      background: rgba(28,20,8,0.55);
     }
 
     .sheet-panel {
       position: relative;
-      background: var(--bg);
-      border-radius: 18px 18px 0 0;
+      background: var(--paper);
+      border-radius: 16px 16px 0 0;
+      border-top: 2px solid var(--paper3);
       width: 100%;
-      padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
-      max-height: 86vh;
+      padding: 16px 16px calc(18px + env(safe-area-inset-bottom));
+      max-height: 88vh;
       overflow-y: auto;
       transform: translateY(16px);
       transition: transform 0.26s cubic-bezier(.22,1,.36,1);
@@ -482,152 +424,157 @@
 
     .sheet-handle {
       width: 36px; height: 4px;
-      background: var(--border-mid);
+      background: var(--paper3);
       border-radius: 2px;
-      margin: 0 auto 18px;
+      margin: 0 auto 16px;
     }
 
     .sheet-title {
       font-family: var(--font-serif);
       font-size: 20px;
-      color: var(--text);
-      margin-bottom: 8px;
-      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 13px;
+    }
+
+    .sheet-tabs {
+      display: flex;
+      border: 1.5px solid var(--border-mid);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .sheet-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 11px 0;
+      font-family: var(--font-kr);
+      font-size: 13px;
+      color: var(--ink-dim);
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .sheet-tab:not(:last-child) { border-right: 1.5px solid var(--border-mid); }
+    .sheet-tab.active { background: var(--olive); color: var(--paper); font-weight: 500; }
+
+    .sheet-tab-panel { display: none; }
+    .sheet-tab-panel.active { display: block; }
+
+    .rule-list {
+      max-height: 340px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .rule-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 10px 13px;
+      background: white;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+    }
+
+    .rule-canonical {
+      font-family: var(--font-kr);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--olive);
+      min-width: 96px;
+      flex-shrink: 0;
+    }
+
+    .rule-keywords {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      flex: 1;
+      word-break: break-all;
     }
 
     .sheet-desc {
       font-size: 12px;
-      color: var(--text-dim);
+      color: var(--ink-dim);
       line-height: 1.7;
-      margin-bottom: 14px;
-      padding: 10px 14px;
-      background: var(--green-light);
-      border-radius: 8px;
+      margin-bottom: 12px;
+      padding: 10px 13px;
+      background: var(--olive-lt);
+      border-radius: var(--r);
       font-weight: 300;
     }
 
     .sheet-desc code {
       font-family: var(--font-mono);
       font-size: 11px;
-      background: var(--green-dim);
+      background: rgba(61,74,40,0.14);
       padding: 1px 6px;
-      border-radius: 4px;
-      color: var(--green);
+      border-radius: 3px;
+      color: var(--olive);
     }
 
     .alias-textarea {
       width: 100%;
       background: white;
-      border: 1px solid var(--border-mid);
-      border-radius: 10px;
-      color: var(--text);
+      border: 1.5px solid var(--border-mid);
+      border-radius: var(--r);
+      color: var(--ink);
       font-family: var(--font-mono);
-      font-size: 12px;
-      padding: 13px 14px;
+      font-size: 13px;
+      padding: 12px 13px;
       outline: none;
       resize: none;
-      height: 300px;
+      height: 280px;
       line-height: 1.8;
       transition: border-color 0.15s;
     }
 
-    .alias-textarea:focus { border-color: var(--green); }
+    .alias-textarea:focus { border-color: var(--olive); }
 
     .alias-count {
       font-family: var(--font-mono);
       font-size: 9px;
-      color: var(--text-muted);
+      color: var(--ink-muted);
       text-align: right;
       margin-top: 6px;
-    }
-
-    /* 탭 */
-    .sheet-tabs {
-      display: flex;
-      margin-bottom: 14px;
-      border: 1px solid var(--border-mid);
-      border-radius: 9px;
-      overflow: hidden;
-    }
-    .sheet-tab {
-      flex: 1;
-      background: none;
-      border: none;
-      padding: 10px 0;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .sheet-tab.active { background: var(--green); color: var(--bg); font-weight: 500; }
-    .sheet-tab-panel { display: none; }
-    .sheet-tab-panel.active { display: block; }
-
-    /* 규칙 목록 */
-    .rule-list {
-      max-height: 340px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .rule-item {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      padding: 9px 12px;
-      background: white;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-    .rule-canonical {
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--green);
-      min-width: 100px;
-      flex-shrink: 0;
-    }
-    .rule-keywords {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      flex: 1;
     }
 
     .sheet-actions { display: flex; gap: 8px; margin-top: 12px; }
 
     .btn-sheet-save {
       flex: 1;
-      background: var(--green);
-      color: var(--bg);
+      background: var(--olive);
+      color: var(--paper);
       border: none;
       border-radius: var(--r);
       font-family: var(--font-serif);
       font-size: 17px;
       padding: 14px;
       cursor: pointer;
+      touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
 
     .btn-sheet-cancel {
       background: white;
-      color: var(--text-dim);
-      border: 1px solid var(--border-mid);
+      color: var(--ink-dim);
+      border: 1.5px solid var(--border-mid);
       border-radius: var(--r);
-      font-family: var(--font-sans);
+      font-family: var(--font-kr);
       font-size: 13px;
-      padding: 14px 16px;
+      padding: 14px;
       cursor: pointer;
+      touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ══════════════════════════════
-       CONFIRM DIALOG
-    ══════════════════════════════ */
     .confirm-overlay {
       position: fixed; inset: 0;
       z-index: 500;
@@ -635,8 +582,7 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: rgba(26,46,40,0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(28,20,8,0.62);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
@@ -645,10 +591,10 @@
     .confirm-overlay.open { opacity: 1; pointer-events: all; }
 
     .confirm-box {
-      background: var(--bg);
-      border: 1px solid var(--border-mid);
-      border-radius: 18px;
-      padding: 28px 22px 22px;
+      background: var(--paper);
+      border: 1.5px solid var(--border-mid);
+      border-radius: 12px;
+      padding: 26px 20px 20px;
       width: 100%;
       max-width: 320px;
       transform: translateY(8px) scale(0.97);
@@ -657,23 +603,22 @@
 
     .confirm-overlay.open .confirm-box { transform: translateY(0) scale(1); }
 
-    .confirm-icon { font-size: 32px; text-align: center; margin-bottom: 12px; }
+    .confirm-icon { font-size: 30px; text-align: center; margin-bottom: 12px; }
 
     .confirm-title {
       font-family: var(--font-serif);
       font-size: 20px;
       text-align: center;
       margin-bottom: 10px;
-      color: var(--text);
-      letter-spacing: -0.02em;
+      color: var(--ink);
     }
 
     .confirm-msg {
       font-size: 13px;
-      color: var(--text-dim);
+      color: var(--ink-dim);
       text-align: center;
       line-height: 1.7;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       white-space: pre-line;
       font-weight: 300;
     }
@@ -682,43 +627,42 @@
 
     .btn-confirm-ok {
       flex: 1;
-      background: var(--green);
-      color: var(--bg);
+      background: var(--olive);
+      color: var(--paper);
       border: none;
       border-radius: var(--r);
       font-family: var(--font-serif);
       font-size: 17px;
       padding: 14px;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
     .btn-confirm-cancel {
       flex: 1;
       background: white;
-      color: var(--text-dim);
-      border: 1px solid var(--border-mid);
+      color: var(--ink-dim);
+      border: 1.5px solid var(--border-mid);
       border-radius: var(--r);
-      font-family: var(--font-sans);
+      font-family: var(--font-kr);
       font-size: 14px;
       padding: 14px;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
-    /* ══════════════════════════════
-       TOAST
-    ══════════════════════════════ */
     .toast {
       position: fixed;
-      top: 64px; left: 50%;
+      top: 60px;
+      left: 50%;
       transform: translateX(-50%) translateY(-8px);
-      background: var(--green);
-      color: var(--bg);
-      font-family: var(--font-sans);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-kr);
       font-size: 13px;
-      font-weight: 400;
       padding: 10px 20px;
       border-radius: 100px;
-      z-index: 600;
+      z-index: 700;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s, transform 0.2s;
@@ -727,20 +671,18 @@
     }
 
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .toast.ok   { background: var(--success); }
-    .toast.warn { background: var(--warn); }
-    .toast.info { background: var(--info); }
+    .toast.ok   { background: var(--olive); color: var(--paper); }
+    .toast.warn { background: var(--rust);  color: white; }
+    .toast.info { background: var(--ink-mid); color: var(--paper); }
   </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
 <div class="app-header">
   <div class="header-top">
     <span class="app-name">신규입고 입력기</span>
-    <span class="app-version">MARKET IN U</span>
+    <span class="app-brand">marketinu</span>
   </div>
-
   <div class="usage-box">
     <strong>브랜드 약칭 + 가격</strong>을 한 칸에 입력 (가격은 천원 단위)<br>
     브랜드 없는 물건은 숫자만 입력
@@ -751,7 +693,6 @@
       <span class="ex-chip">폴로 120</span>
     </div>
   </div>
-
   <div class="hanger-setup">
     <div class="setup-field">
       <label>Rack No.</label>
@@ -764,7 +705,6 @@
   </div>
 </div>
 
-<!-- ── STATS ── -->
 <div class="stats-bar">
   <div class="stat-item">
     <span class="stat-num" id="sNow">0</span>
@@ -780,14 +720,12 @@
   </div>
 </div>
 
-<!-- ── SAVE BAR ── -->
 <div class="save-bar">
   <div class="save-dot" id="saveDot"></div>
   <span id="saveLabel">자동저장 대기 중</span>
 </div>
 
 <div id="restoreBanner" style="display:none"></div>
-
 <div class="items-list" id="itemsList"></div>
 
 <div class="completed-section" id="completedSection" style="display:none">
@@ -795,7 +733,6 @@
   <div id="completedList"></div>
 </div>
 
-<!-- ── BOTTOM BAR ── -->
 <div class="bottom-bar">
   <button class="btn btn-icon" id="btnAliases">🏷</button>
   <button class="btn btn-complete" id="btnComplete" disabled>행거 완료</button>
@@ -804,7 +741,6 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ── ALIAS SHEET ── -->
 <div class="sheet-overlay" id="aliasSheet">
   <div class="sheet-backdrop" id="aliasBackdrop"></div>
   <div class="sheet-panel">
@@ -835,7 +771,6 @@
   </div>
 </div>
 
-<!-- ── CONFIRM DIALOG ── -->
 <div class="confirm-overlay" id="confirmDialog">
   <div class="confirm-box">
     <div class="confirm-icon" id="confirmIcon">📥</div>
@@ -849,60 +784,55 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-//  ★ 브랜드 약칭 규칙 (이 파일 수정 → 전원 자동 적용)
-// ══════════════════════════════════════════════════════════
- const BUILT_IN_ALIAS_TEXT = ``나이, 나이키, 이키, nike = 나이키
-    아디, 아디다, 다스 = 아디다스
-    폴로, 랄프, 랄프로렌, 폴 = 폴로 랄프로렌
-    타미, 힐피거 = 타미힐피거
-    갭 = 갭
-    리바이, 리바이스, 리바 = 리바이스
-    캘빈, 클라인 = 캘빈클라인
-    뉴발, 뉴발란스 = 뉴발란스
-    컨버스, 컨버 = 컨버스
-    반스 = 반스
-    노페, 노스페이스, 노스 = 노스페이스
-    cp, 씨피 = 씨피컴퍼니
-    파타 = 파타고니아
-    아크, 아크테릭스 = 아크테릭스
-    콜럼비아, 콜럼 = 콜럼비아
-    몽클 = 몽클레어
-    버버리, 버버 = 버버리
-    구찌, 찌 = 구찌
-    프라다, 프라 = 프라다
-    생로랑, 생로 = 생로랑
-    발렌, 발렌시아가 = 발렌시아가
-    지방시, 지방 = 지방시
-    셀린, 셀린느 = 셀린느
-    막스, 막스마라 = 막스마라
-    코치 = 코치
-    마이클, 마코 = 마이클코어스
-    마르니, 마르 = 마르니
-    아크네 = 아크네
-    메종, 마르지 = 메종마르지엘라
-    오프, 오프화 = 오프화이트
-    스톤, 스톤아 = 스톤아일랜드
-    아미 = 아미
-    라코, 라코스 = 라코스테
-    프레드, 프페 = 프레드페리
-    챔피 = 챔피온
-    슈프 = 슈프림
-    스투, 스튜 = 스투시
-    칼하, 칼 = 칼하트
-    디키 = 디키즈
-    빈폴 = 빈폴
-    헤지 = 헤지스
-    유니클로, 유니 = 유니클로
-    꼼데, 꼼데가르송 = 꼼데가르송
-    사카 = 사카이
-    니들, needles = 니들스
-    아더, 아더에러 = 아더에러
-    커버, covernat = 커버낫
-    마하, 마하그리드 = 마하그리드
-    버즈, 버즈릭 = 버즈릭슨``;
+const BUILT_IN_ALIAS_TEXT = `나이, 나이키, 이키, nike = 나이키
+아디, 아디다, 다스, adidas = 아디다스
+폴로, 랄프, 랄프로렌 = 폴로 랄프로렌
+타미, 힐피거, tommy = 타미힐피거
+갭, gap = 갭
+리바이, 리바이스, levi = 리바이스
+캘빈, 클라인, ck = 캘빈클라인
+뉴발, 뉴발란스, nb = 뉴발란스
+컨버스, converse = 컨버스
+반스, vans = 반스
+노페, 노스페이스, north = 노스페이스
+파타, 파타고니아 = 파타고니아
+아크, 아크테릭스 = 아크테릭스
+콜럼비아, columbia = 콜럼비아
+몽클, 몽클레어 = 몽클레어
+버버리, burberry = 버버리
+구찌, gucci = 구찌
+프라다, prada = 프라다
+생로랑, ysl = 생로랑
+발렌, 발렌시아가 = 발렌시아가
+지방시, givenchy = 지방시
+셀린, 셀린느 = 셀린느
+막스, 막스마라 = 막스마라
+코치, coach = 코치
+마이클, 마코 = 마이클코어스
+마르니, marni = 마르니
+아크네, acne = 아크네
+메종, 마르지 = 메종마르지엘라
+오프, 오프화이트 = 오프화이트
+스톤, 스톤아일 = 스톤아일랜드
+아미, ami = 아미
+라코, 라코스테, lacoste = 라코스테
+프레드, 프레드페리 = 프레드페리
+챔피언, champion = 챔피언
+슈프림, supreme = 슈프림
+스투시, stussy = 스투시
+카하트, carhartt = 카하트
+딕키, 딕키즈 = 딕키즈
+빈폴 = 빈폴
+헤지스 = 헤지스
+유니클로, 유니 = 유니클로
+꼼데, 꼼데가르송 = 꼼데가르송
+사카이, sacai = 사카이
+니들즈, needles = 니들즈
+아더, 아더에러 = 아더에러
+커버낫, covernat = 커버낫
+마하, 마하그리드 = 마하그리드
+버즈, 버즈리크슨 = 버즈리크슨`;
 
-// ── Alias Engine ──
 let aliasMap = {};
 
 function parseAliasText(text) {
@@ -924,7 +854,7 @@ function resolveBrand(raw) {
   if (!raw || !raw.trim()) return '';
   const lower = raw.trim().toLowerCase();
   if (aliasMap[lower]) return aliasMap[lower];
-  const keys = Object.keys(aliasMap).sort((a,b) => b.length - a.length);
+  const keys = Object.keys(aliasMap).sort((a, b) => b.length - a.length);
   for (const k of keys) { if (lower === k || lower.includes(k)) return aliasMap[k]; }
   return raw.trim();
 }
@@ -939,22 +869,19 @@ function loadAliases() {
 
 loadAliases();
 
-// ── Parser ──
 function parseInput(val) {
   val = (val || '').trim();
   if (!val) return { brandRaw: '', price: null };
   const parts = val.split(/\s+/);
   const last = parts[parts.length - 1];
-  if (/^\d+$/.test(last)) return { brandRaw: parts.slice(0,-1).join(' '), price: parseInt(last,10)*1000 };
+  if (/^\d+$/.test(last)) return { brandRaw: parts.slice(0, -1).join(' '), price: parseInt(last, 10) * 1000 };
   return { brandRaw: val, price: null };
 }
 
-// ── State ──
 const PRERENDER = 60, EXTEND_AT = 12, AUTOSAVE_KEY = 'vshop_session';
 let data = [], renderedCount = 0, activeMax = 0, completedHangers = [];
 let autoSaveTimer = null, hasUnsaved = false;
 
-// ── Auto-Save ──
 function scheduleAutoSave() {
   hasUnsaved = true; setSaveDot('saving');
   clearTimeout(autoSaveTimer);
@@ -966,7 +893,7 @@ function doAutoSave() {
     const session = {
       hangerNum: document.getElementById('hangerNum').value,
       hangerCat: document.getElementById('hangerCat').value,
-      data: data.slice(0, Math.max(activeMax+2,1)).map(d=>({ raw: d.raw||'' })),
+      data: data.slice(0, Math.max(activeMax + 2, 1)).map(d => ({ raw: d.raw || '' })),
       activeMax, completedHangers, savedAt: Date.now(),
     };
     localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(session));
@@ -974,11 +901,8 @@ function doAutoSave() {
     const t = new Date();
     document.getElementById('saveLabel').textContent =
       `자동저장 ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
-    setTimeout(()=>{ if(!hasUnsaved) setSaveDot(''); }, 3000);
-  } catch(e) {
-    setSaveDot('');
-    document.getElementById('saveLabel').textContent = '저장 실패';
-  }
+    setTimeout(() => { if (!hasUnsaved) setSaveDot(''); }, 3000);
+  } catch(e) { setSaveDot(''); document.getElementById('saveLabel').textContent = '저장 실패'; }
 }
 
 function setSaveDot(s) {
@@ -991,40 +915,37 @@ function clearAutoSave() {
   document.getElementById('saveLabel').textContent = '자동저장 대기 중';
 }
 
-// ── Restore ──
 function tryRestore() {
   try {
     const raw = localStorage.getItem(AUTOSAVE_KEY);
     if (!raw) return false;
     const session = JSON.parse(raw);
     if (!session?.data?.length) return false;
-    const filledCount = session.data.filter(d=>d.raw?.trim()).length;
-    const completedCount = (session.completedHangers||[]).length;
+    const filledCount = session.data.filter(d => d.raw?.trim()).length;
+    const completedCount = (session.completedHangers || []).length;
     if (!filledCount && !completedCount) return false;
 
-    const elapsed = Date.now() - (session.savedAt||0);
-    const when = elapsed < 60000 ? '방금 전' : elapsed < 3600000 ? `${Math.floor(elapsed/60000)}분 전` : `${Math.floor(elapsed/3600000)}시간 전`;
+    const elapsed = Date.now() - (session.savedAt || 0);
+    const when = elapsed < 60000 ? '방금 전'
+      : elapsed < 3600000 ? `${Math.floor(elapsed / 60000)}분 전`
+      : `${Math.floor(elapsed / 3600000)}시간 전`;
 
-    document.getElementById('hangerNum').value = session.hangerNum||'';
-    document.getElementById('hangerCat').value = session.hangerCat||'';
-    completedHangers = session.completedHangers||[];
-    data=[]; renderedCount=0; activeMax=session.activeMax||0;
-    document.getElementById('itemsList').innerHTML='';
-
+    document.getElementById('hangerNum').value = session.hangerNum || '';
+    document.getElementById('hangerCat').value = session.hangerCat || '';
+    completedHangers = session.completedHangers || [];
+    data = []; renderedCount = 0; activeMax = session.activeMax || 0;
+    document.getElementById('itemsList').innerHTML = '';
     renderRows(Math.max(session.data.length, PRERENDER));
-
-    session.data.forEach((d,i) => {
+    session.data.forEach((d, i) => {
       if (!d.raw) return;
       const row = document.querySelector(`.item-row[data-i="${i}"]`);
       if (!row) return;
       const input = row.querySelector('.combo-input');
       if (input) { input.value = d.raw; input.dispatchEvent(new Event('input')); }
     });
-
     document.querySelectorAll('.item-row').forEach(r => {
       if (parseInt(r.dataset.i) <= activeMax) r.classList.remove('future');
     });
-
     renderCompleted(); updateStats();
 
     const banner = document.getElementById('restoreBanner');
@@ -1034,35 +955,32 @@ function tryRestore() {
     msg += `</span>`;
     banner.innerHTML = `<div class="restore-banner">${msg}<button class="btn-restore-dismiss" id="btnRestoreDismiss">확인</button></div>`;
     banner.style.display = 'block';
-    document.getElementById('btnRestoreDismiss').addEventListener('click', ()=>{ banner.style.display='none'; });
+    document.getElementById('btnRestoreDismiss').addEventListener('click', () => { banner.style.display = 'none'; });
     return true;
   } catch(e) { return false; }
 }
 
-// ── Init ──
 function resetCurrentHanger() {
-  data=[]; renderedCount=0; activeMax=0;
-  document.getElementById('itemsList').innerHTML='';
+  data = []; renderedCount = 0; activeMax = 0;
+  document.getElementById('itemsList').innerHTML = '';
   renderRows(PRERENDER); updateStats();
-  setTimeout(()=>{ const f=document.querySelector('.combo-input'); if(f) f.focus(); }, 120);
+  setTimeout(() => { const f = document.querySelector('.combo-input'); if (f) f.focus(); }, 120);
   scheduleAutoSave();
 }
 
-// ── Render Rows ──
 function renderRows(count) {
   const list = document.getElementById('itemsList');
-  for (let i=0; i<count; i++) {
+  for (let i = 0; i < count; i++) {
     const index = renderedCount;
-    if (data.length <= index) data.push({ raw:'', brandRaw:'', price:null });
+    if (data.length <= index) data.push({ raw: '', brandRaw: '', price: null });
 
     const row = document.createElement('div');
     row.className = 'item-row future';
     row.dataset.i = index;
-
     row.innerHTML = `
-      <span class="item-num">${index+1}</span>
+      <span class="item-num">${index + 1}</span>
       <input class="combo-input" type="text" inputmode="text"
-        placeholder="${index===0 ? '예: 나이 34  또는  25' : ''}"
+        placeholder="${index === 0 ? '예: 나이 34  또는  25' : ''}"
         autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
       <div class="parse-badge">
         <div class="parse-inner">
@@ -1080,7 +998,6 @@ function renderRows(count) {
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        // 다음 행으로 포커스 이동
         const next = document.querySelector(`.item-row[data-i="${index + 1}"] .combo-input`);
         if (next) next.focus();
       }
@@ -1089,18 +1006,18 @@ function renderRows(count) {
     input.addEventListener('input', () => {
       const parsed = parseInput(input.value);
       if (!data[index]) data[index] = {};
-      data[index].raw = input.value;
+      data[index].raw      = input.value;
       data[index].brandRaw = parsed.brandRaw;
-      data[index].price = parsed.price;
+      data[index].price    = parsed.price;
       if (parsed.price !== null) {
-        bp.textContent = (parsed.price/1000)+'K';
+        bp.textContent = (parsed.price / 1000) + 'K';
         const res = resolveBrand(parsed.brandRaw);
-        bb.textContent = res||'';
+        bb.textContent = res || '';
         row.classList.add('has-data');
         row.classList.toggle('has-brand', !!(res && parsed.brandRaw));
       } else {
-        bp.textContent=''; bb.textContent='';
-        row.classList.remove('has-data','has-brand');
+        bp.textContent = ''; bb.textContent = '';
+        row.classList.remove('has-data', 'has-brand');
       }
       updateStats(); scheduleAutoSave();
     });
@@ -1117,104 +1034,94 @@ function onFocus(index) {
     parseInt(r.dataset.i) <= activeMax ? r.classList.remove('future') : r.classList.add('future');
   });
   const row = document.querySelector(`.item-row[data-i="${index}"]`);
-  if (row) { row.classList.add('current'); row.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+  if (row) { row.classList.add('current'); row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
   if (renderedCount - index <= EXTEND_AT) renderRows(PRERENDER);
   updateStats(); scheduleAutoSave();
 }
 
 function updateStats() {
-  const filled = data.slice(0, activeMax+1).filter(d=>d?.price!==null && d?.price!==undefined);
+  const filled = data.slice(0, activeMax + 1).filter(d => d?.price != null);
   document.getElementById('sNow').textContent   = filled.length;
-  const total = completedHangers.reduce((s,h)=>s+h.items.length,0)+filled.length;
+  const total = completedHangers.reduce((s, h) => s + h.items.length, 0) + filled.length;
   document.getElementById('sTotal').textContent = total;
   document.getElementById('sDone').textContent  = completedHangers.length;
-  const can = filled.length>0
+  const can = filled.length > 0
     && document.getElementById('hangerNum').value.trim()
     && document.getElementById('hangerCat').value.trim();
   document.getElementById('btnComplete').disabled = !can;
 }
 
-// ── Hanger Complete ──
 document.getElementById('btnComplete').addEventListener('click', () => {
   const num = document.getElementById('hangerNum').value.trim();
   const cat = document.getElementById('hangerCat').value.trim();
-  if (!num||!cat) { showToast('행거 번호와 카테고리를 입력해주세요','warn'); return; }
-  const validItems = data.slice(0,activeMax+1).filter(d=>d?.price!=null)
-    .map(d=>({ brandRaw:d.brandRaw||'', brand:resolveBrand(d.brandRaw||''), price:d.price }));
+  if (!num || !cat) { showToast('행거 번호와 카테고리를 입력해주세요', 'warn'); return; }
+  const validItems = data.slice(0, activeMax + 1).filter(d => d?.price != null)
+    .map(d => ({ brandRaw: d.brandRaw || '', brand: resolveBrand(d.brandRaw || ''), price: d.price }));
   if (!validItems.length) return;
-  completedHangers.push({ hangerNum:num, category:cat, items:validItems });
+  completedHangers.push({ hangerNum: num, category: cat, items: validItems });
   showToast(`${num}번 행거 완료 — ${validItems.length}벌`, 'ok');
   renderCompleted();
-  document.getElementById('hangerNum').value='';
-  document.getElementById('hangerCat').value='';
+  document.getElementById('hangerNum').value = '';
+  document.getElementById('hangerCat').value = '';
   resetCurrentHanger();
 });
 
 function renderCompleted() {
   const sec  = document.getElementById('completedSection');
   const list = document.getElementById('completedList');
-  if (!completedHangers.length) { sec.style.display='none'; return; }
-  sec.style.display='block'; list.innerHTML='';
+  if (!completedHangers.length) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block'; list.innerHTML = '';
   [...completedHangers].reverse().forEach(h => {
-    const wb = h.items.filter(i=>i.brand).length;
+    const wb = h.items.filter(i => i.brand).length;
     const d = document.createElement('div');
-    d.className='completed-hanger';
-    d.innerHTML=`
-      <div>
-        <div class="ch-id">Rack ${h.hangerNum}</div>
-        <div class="ch-meta">${h.category}${wb?` · 브랜드 ${wb}개`:''}</div>
-      </div>
-      <span class="ch-count">${h.items.length}</span>`;
+    d.className = 'completed-hanger';
+    d.innerHTML = `<div><div class="ch-id">Rack ${h.hangerNum}</div><div class="ch-meta">${h.category}${wb ? ` · 브랜드 ${wb}개` : ''}</div></div><span class="ch-count">${h.items.length}</span>`;
     list.appendChild(d);
   });
   updateStats();
 }
 
-// ── Download ──
 document.getElementById('btnDownload').addEventListener('click', () => {
-  const totalFilled = completedHangers.reduce((s,h)=>s+h.items.length,0)
-    + data.slice(0,activeMax+1).filter(d=>d?.price!=null).length;
-  if (!totalFilled) { showToast('입력된 데이터가 없어요','warn'); return; }
+  const totalFilled = completedHangers.reduce((s, h) => s + h.items.length, 0)
+    + data.slice(0, activeMax + 1).filter(d => d?.price != null).length;
+  if (!totalFilled) { showToast('입력된 데이터가 없어요', 'warn'); return; }
   showConfirm({
-    icon:'📥', title:'Excel 다운로드',
-    msg:`총 ${totalFilled}건을 저장합니다.\n저장 후 팀장에게 전송하세요.`,
-    okText:'다운로드', onOk:doDownload,
+    icon: '📥', title: 'Excel 다운로드',
+    msg: `총 ${totalFilled}건을 저장합니다.\n저장 후 팀장에게 전송하세요.`,
+    okText: '다운로드', onOk: doDownload,
   });
 });
 
 function doDownload() {
-  const rows=[]; let seq=1;
-  completedHangers.forEach(h=>{
-    h.items.forEach(item=>rows.push({ '행거번호':h.hangerNum,'순번':seq++,'브랜드(원문)':item.brandRaw,'브랜드(변환)':item.brand,'카테고리':h.category,'가격':item.price }));
+  const rows = []; let seq = 1;
+  completedHangers.forEach(h => {
+    h.items.forEach(item => rows.push({ '행거번호': h.hangerNum, '순번': seq++, '브랜드(원문)': item.brandRaw, '브랜드(변환)': item.brand, '카테고리': h.category, '가격': item.price }));
   });
-  const num=document.getElementById('hangerNum').value.trim();
-  const cat=document.getElementById('hangerCat').value.trim();
-  if (num&&cat) {
-    data.slice(0,activeMax+1).filter(d=>d?.price!=null).forEach(d=>{
-      rows.push({ '행거번호':`${num}(진행중)`,'순번':seq++,'브랜드(원문)':d.brandRaw||'','브랜드(변환)':resolveBrand(d.brandRaw||''),'카테고리':cat,'가격':d.price });
+  const num = document.getElementById('hangerNum').value.trim();
+  const cat = document.getElementById('hangerCat').value.trim();
+  if (num && cat) {
+    data.slice(0, activeMax + 1).filter(d => d?.price != null).forEach(d => {
+      rows.push({ '행거번호': `${num}(진행중)`, '순번': seq++, '브랜드(원문)': d.brandRaw || '', '브랜드(변환)': resolveBrand(d.brandRaw || ''), '카테고리': cat, '가격': d.price });
     });
   }
-  const ws=XLSX.utils.json_to_sheet(rows);
-  ws['!cols']=[{wch:10},{wch:7},{wch:14},{wch:18},{wch:12},{wch:10}];
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'신규입고');
-  const d=new Date();
-  const ds=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  XLSX.writeFile(wb,`입고_${ds}.xlsx`);
-  clearAutoSave(); completedHangers=[];
-  document.getElementById('hangerNum').value='';
-  document.getElementById('hangerCat').value='';
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{ wch: 10 }, { wch: 7 }, { wch: 14 }, { wch: 18 }, { wch: 12 }, { wch: 10 }];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, '신규입고');
+  const d = new Date();
+  const ds = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  XLSX.writeFile(wb, `입고_${ds}.xlsx`);
+  clearAutoSave(); completedHangers = [];
+  document.getElementById('hangerNum').value = '';
+  document.getElementById('hangerCat').value = '';
   resetCurrentHanger(); renderCompleted();
-  document.getElementById('restoreBanner').style.display='none';
-  showToast(`${rows.length}건 저장 완료`,'ok');
+  document.getElementById('restoreBanner').style.display = 'none';
+  showToast(`${rows.length}건 저장 완료`, 'ok');
 }
 
-// ── Alias Sheet ──
-
-// 탭 전환
 function switchTab(tab) {
-  document.querySelectorAll('.sheet-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.sheet-tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sheet-tab-panel').forEach(p => p.classList.remove('active'));
   if (tab === 'view') {
     document.getElementById('tabView').classList.add('active');
     document.getElementById('panelView').classList.add('active');
@@ -1225,107 +1132,103 @@ function switchTab(tab) {
   }
 }
 
-document.getElementById('tabView').addEventListener('click', ()=>switchTab('view'));
-document.getElementById('tabEdit').addEventListener('click', ()=>switchTab('edit'));
+document.getElementById('tabView').addEventListener('click', () => switchTab('view'));
+document.getElementById('tabEdit').addEventListener('click', () => switchTab('edit'));
 
-// 현재 적용 중인 규칙 목록 렌더
 function renderRuleList() {
   const list = document.getElementById('ruleList');
   list.innerHTML = '';
-
-  // aliasMap을 canonical → [keywords] 로 역매핑
   const canonicalMap = {};
   Object.entries(aliasMap).forEach(([kw, canonical]) => {
     if (!canonicalMap[canonical]) canonicalMap[canonical] = [];
     canonicalMap[canonical].push(kw);
   });
-
-  const entries = Object.entries(canonicalMap).sort((a,b)=>a[0].localeCompare(b[0],'ko'));
+  const entries = Object.entries(canonicalMap).sort((a, b) => a[0].localeCompare(b[0], 'ko'));
   document.getElementById('ruleTotal').textContent = `총 ${entries.length}개 브랜드 규칙 적용 중`;
-
   entries.forEach(([canonical, kws]) => {
     const d = document.createElement('div');
     d.className = 'rule-item';
-    d.innerHTML = `
-      <span class="rule-canonical">${canonical}</span>
-      <span class="rule-keywords">${kws.join(', ')}</span>
-    `;
+    d.innerHTML = `<span class="rule-canonical">${canonical}</span><span class="rule-keywords">${kws.join(', ')}</span>`;
     list.appendChild(d);
   });
 }
 
-document.getElementById('btnAliases').addEventListener('click',()=>{
-  document.getElementById('aliasTa').value=localStorage.getItem('vshop_alias_override')||'';
+document.getElementById('btnAliases').addEventListener('click', () => {
+  document.getElementById('aliasTa').value = localStorage.getItem('vshop_alias_override') || '';
   updateAliasCount(document.getElementById('aliasTa').value);
-  switchTab('view'); // 열 때 항상 보기 탭 먼저
+  switchTab('view');
   document.getElementById('aliasSheet').classList.add('open');
 });
-document.getElementById('aliasTa').addEventListener('input',e=>updateAliasCount(e.target.value));
-function updateAliasCount(text) {
-  const n=text.split('\n').filter(l=>l.trim()&&l.includes('=')).length;
-  document.getElementById('aliasCount').textContent=n?`이 기기 오버라이드 ${n}개`:'비어있으면 내장 규칙만 사용';
-}
-document.getElementById('btnAliasSave').addEventListener('click',()=>{
-  const text=document.getElementById('aliasTa').value.trim();
-  try { text?localStorage.setItem('vshop_alias_override',text):localStorage.removeItem('vshop_alias_override'); } catch(e){}
-  loadAliases(); document.getElementById('aliasSheet').classList.remove('open');
-  document.querySelectorAll('.item-row').forEach(row=>{
-    const i=parseInt(row.dataset.i); const d=data[i];
-    if(!d||d.price==null) return;
-    const badge=row.querySelector('.badge-brand');
-    if(badge) badge.textContent=resolveBrand(d.brandRaw||'')||'';
-  });
-  showToast('규칙 저장 완료','ok');
-});
-document.getElementById('btnAliasReset').addEventListener('click',()=>{
-  document.getElementById('aliasTa').value=''; updateAliasCount('');
-  showToast('저장 누르면 내장 규칙으로 돌아가요','info');
-});
-document.getElementById('btnAliasCancel').addEventListener('click',()=>document.getElementById('aliasSheet').classList.remove('open'));
-document.getElementById('aliasBackdrop').addEventListener('click',()=>document.getElementById('aliasSheet').classList.remove('open'));
 
-// ── Confirm ──
-let confirmCallback=null;
-function showConfirm({icon,title,msg,okText='확인',onOk}) {
-  document.getElementById('confirmIcon').textContent=icon||'⚠️';
-  document.getElementById('confirmTitle').textContent=title;
-  document.getElementById('confirmMsg').textContent=msg;
-  document.getElementById('confirmOk').textContent=okText;
-  confirmCallback=onOk;
+document.getElementById('aliasTa').addEventListener('input', e => updateAliasCount(e.target.value));
+
+function updateAliasCount(text) {
+  const n = text.split('\n').filter(l => l.trim() && l.includes('=')).length;
+  document.getElementById('aliasCount').textContent = n ? `이 기기 오버라이드 ${n}개` : '비어있으면 내장 규칙만 사용';
+}
+
+document.getElementById('btnAliasSave').addEventListener('click', () => {
+  const text = document.getElementById('aliasTa').value.trim();
+  try { text ? localStorage.setItem('vshop_alias_override', text) : localStorage.removeItem('vshop_alias_override'); } catch(e) {}
+  loadAliases();
+  document.getElementById('aliasSheet').classList.remove('open');
+  document.querySelectorAll('.item-row').forEach(row => {
+    const i = parseInt(row.dataset.i); const d = data[i];
+    if (!d || d.price == null) return;
+    const badge = row.querySelector('.badge-brand');
+    if (badge) badge.textContent = resolveBrand(d.brandRaw || '') || '';
+  });
+  showToast('규칙 저장 완료', 'ok');
+});
+
+document.getElementById('btnAliasReset').addEventListener('click', () => {
+  document.getElementById('aliasTa').value = ''; updateAliasCount('');
+  showToast('저장 누르면 내장 규칙으로 돌아가요', 'info');
+});
+
+document.getElementById('btnAliasCancel').addEventListener('click', () => document.getElementById('aliasSheet').classList.remove('open'));
+document.getElementById('aliasBackdrop').addEventListener('click', () => document.getElementById('aliasSheet').classList.remove('open'));
+
+let confirmCallback = null;
+function showConfirm({ icon, title, msg, okText = '확인', onOk }) {
+  document.getElementById('confirmIcon').textContent  = icon || '⚠️';
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent   = msg;
+  document.getElementById('confirmOk').textContent    = okText;
+  confirmCallback = onOk;
   document.getElementById('confirmDialog').classList.add('open');
 }
-document.getElementById('confirmOk').addEventListener('click',()=>{
+
+document.getElementById('confirmOk').addEventListener('click', () => {
   document.getElementById('confirmDialog').classList.remove('open');
-  if(confirmCallback){confirmCallback();confirmCallback=null;}
-});
-document.getElementById('confirmCancel').addEventListener('click',()=>{
-  document.getElementById('confirmDialog').classList.remove('open');
-  confirmCallback=null;
+  if (confirmCallback) { confirmCallback(); confirmCallback = null; }
 });
 
-// ── Before Unload ──
-window.addEventListener('beforeunload',e=>{
-  const filled=data.slice(0,activeMax+1).filter(d=>d?.price!=null).length;
-  if(completedHangers.length+filled>0){e.preventDefault();e.returnValue='';}
+document.getElementById('confirmCancel').addEventListener('click', () => {
+  document.getElementById('confirmDialog').classList.remove('open');
+  confirmCallback = null;
 });
 
-['hangerNum','hangerCat'].forEach(id=>
-  document.getElementById(id).addEventListener('input',()=>{updateStats();scheduleAutoSave();})
+window.addEventListener('beforeunload', e => {
+  const filled = data.slice(0, activeMax + 1).filter(d => d?.price != null).length;
+  if (completedHangers.length + filled > 0) { e.preventDefault(); e.returnValue = ''; }
+});
+
+['hangerNum', 'hangerCat'].forEach(id =>
+  document.getElementById(id).addEventListener('input', () => { updateStats(); scheduleAutoSave(); })
 );
 
-// ── Toast ──
 let toastTimer;
-function showToast(msg,type='') {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast'+(type?` ${type}`:'');
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast' + (type ? ` ${type}` : '');
   clearTimeout(toastTimer);
-  requestAnimationFrame(()=>{
+  requestAnimationFrame(() => {
     t.classList.add('show');
-    toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
   });
 }
 
-// ── Start ──
 if (!tryRestore()) resetCurrentHanger();
 </script>
 </body>
