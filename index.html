@@ -1,39 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>입고 입력기</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap"
+    rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:          #F0EBE1;
-      --bg2:         #EAE3D6;
-      --surface:     #E6DFD0;
-      --surface2:    #DDD5C4;
-      --green:       #1E3A32;
-      --green-mid:   #2D5446;
-      --green-light: rgba(30,58,50,0.08);
-      --green-dim:   rgba(30,58,50,0.14);
-      --salmon:      #E8A090;
-      --border:      rgba(30,58,50,0.14);
-      --border-mid:  rgba(30,58,50,0.24);
-      --text:        #1A2E28;
-      --text-dim:    #5A7268;
-      --text-muted:  #9AB0A8;
-      --success:     #2D7A50;
-      --warn:        #B87A30;
-      --info:        #2A5A8A;
-      --font-serif:  'DM Serif Display', serif;
-      --font-sans:   'DM Sans', 'Noto Sans KR', sans-serif;
-      --font-mono:   'Space Mono', monospace;
-      --r:           10px;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html, body { height: 100%; }
+    :root {
+      --bg: #F0EBE1;
+      --bg2: #EAE3D6;
+      --surface: #E6DFD0;
+      --surface2: #DDD5C4;
+      --green: #1E3A32;
+      --green-mid: #2D5446;
+      --green-light: rgba(30, 58, 50, 0.08);
+      --green-dim: rgba(30, 58, 50, 0.14);
+      --salmon: #E8A090;
+      --border: rgba(30, 58, 50, 0.14);
+      --border-mid: rgba(30, 58, 50, 0.24);
+      --text: #1A2E28;
+      --text-dim: #5A7268;
+      --text-muted: #9AB0A8;
+      --success: #2D7A50;
+      --warn: #B87A30;
+      --info: #2A5A8A;
+      --font-serif: 'DM Serif Display', serif;
+      --font-sans: 'DM Sans', 'Noto Sans KR', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --r: 10px;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
 
     body {
       background: var(--bg);
@@ -74,26 +86,26 @@
     .app-version {
       font-family: var(--font-mono);
       font-size: 9px;
-      color: rgba(240,235,225,0.38);
+      color: rgba(240, 235, 225, 0.38);
       letter-spacing: 0.14em;
     }
 
     /* 사용법 */
     .usage-box {
-      background: rgba(240,235,225,0.09);
-      border: 1px solid rgba(240,235,225,0.16);
+      background: rgba(240, 235, 225, 0.09);
+      border: 1px solid rgba(240, 235, 225, 0.16);
       border-radius: var(--r);
       padding: 11px 14px;
       margin-bottom: 14px;
       font-size: 12px;
       line-height: 1.7;
-      color: rgba(240,235,225,0.6);
+      color: rgba(240, 235, 225, 0.6);
       font-family: var(--font-sans);
       font-weight: 300;
     }
 
     .usage-box strong {
-      color: rgba(240,235,225,0.9);
+      color: rgba(240, 235, 225, 0.9);
       font-weight: 500;
     }
 
@@ -105,13 +117,13 @@
     }
 
     .ex-chip {
-      background: rgba(240,235,225,0.13);
-      border: 1px solid rgba(240,235,225,0.22);
+      background: rgba(240, 235, 225, 0.13);
+      border: 1px solid rgba(240, 235, 225, 0.22);
       border-radius: 100px;
       padding: 3px 10px;
       font-family: var(--font-mono);
       font-size: 11px;
-      color: rgba(240,235,225,0.8);
+      color: rgba(240, 235, 225, 0.8);
     }
 
     /* 행거 설정 */
@@ -125,7 +137,7 @@
       display: block;
       font-family: var(--font-mono);
       font-size: 8px;
-      color: rgba(240,235,225,0.4);
+      color: rgba(240, 235, 225, 0.4);
       letter-spacing: 0.18em;
       text-transform: uppercase;
       margin-bottom: 5px;
@@ -133,8 +145,8 @@
 
     .setup-input {
       width: 100%;
-      background: rgba(240,235,225,0.1);
-      border: 1px solid rgba(240,235,225,0.2);
+      background: rgba(240, 235, 225, 0.1);
+      border: 1px solid rgba(240, 235, 225, 0.2);
       border-radius: 8px;
       color: var(--bg);
       font-family: var(--font-sans);
@@ -147,12 +159,12 @@
     }
 
     .setup-input:focus {
-      border-color: rgba(240,235,225,0.5);
-      background: rgba(240,235,225,0.15);
+      border-color: rgba(240, 235, 225, 0.5);
+      background: rgba(240, 235, 225, 0.15);
     }
 
     .setup-input::placeholder {
-      color: rgba(240,235,225,0.25);
+      color: rgba(240, 235, 225, 0.25);
       font-size: 13px;
     }
 
@@ -176,7 +188,9 @@
       border-right: 1px solid var(--border);
     }
 
-    .stat-item:last-child { border-right: none; }
+    .stat-item:last-child {
+      border-right: none;
+    }
 
     .stat-num {
       font-family: var(--font-serif);
@@ -210,22 +224,28 @@
     }
 
     .save-dot {
-      width: 5px; height: 5px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: var(--text-muted);
       flex-shrink: 0;
       transition: background 0.3s;
     }
 
-    .save-dot.saving { background: var(--warn); }
-    .save-dot.saved  { background: var(--success); }
+    .save-dot.saving {
+      background: var(--warn);
+    }
+
+    .save-dot.saved {
+      background: var(--success);
+    }
 
     /* ══════════════════════════════
        RESTORE BANNER
     ══════════════════════════════ */
     .restore-banner {
-      background: rgba(42,90,138,0.08);
-      border: 1px solid rgba(42,90,138,0.2);
+      background: rgba(42, 90, 138, 0.08);
+      border: 1px solid rgba(42, 90, 138, 0.2);
       border-radius: 8px;
       margin: 10px 16px 0;
       padding: 11px 14px;
@@ -235,12 +255,19 @@
       gap: 10px;
     }
 
-    .restore-text { font-size: 12px; color: var(--info); line-height: 1.45; }
-    .restore-text strong { font-weight: 500; }
+    .restore-text {
+      font-size: 12px;
+      color: var(--info);
+      line-height: 1.45;
+    }
+
+    .restore-text strong {
+      font-weight: 500;
+    }
 
     .btn-restore-dismiss {
       background: none;
-      border: 1px solid rgba(42,90,138,0.3);
+      border: 1px solid rgba(42, 90, 138, 0.3);
       border-radius: 100px;
       color: var(--info);
       font-family: var(--font-sans);
@@ -271,7 +298,9 @@
       transition: opacity 0.2s;
     }
 
-    .item-row.future { opacity: 0.18; }
+    .item-row.future {
+      opacity: 0.18;
+    }
 
     .item-num {
       font-family: var(--font-mono);
@@ -284,8 +313,14 @@
       transition: color 0.15s;
     }
 
-    .item-row.has-data  .item-num { color: var(--text-dim); }
-    .item-row.has-brand .item-num { color: var(--green-mid); font-weight: 700; }
+    .item-row.has-data .item-num {
+      color: var(--text-dim);
+    }
+
+    .item-row.has-brand .item-num {
+      color: var(--green-mid);
+      font-weight: 700;
+    }
 
     /* 입력칸 */
     .combo-input {
@@ -354,7 +389,9 @@
     /* ══════════════════════════════
        COMPLETED
     ══════════════════════════════ */
-    .completed-section { margin: 4px 16px 0; }
+    .completed-section {
+      margin: 4px 16px 0;
+    }
 
     .section-title {
       font-family: var(--font-mono);
@@ -384,7 +421,12 @@
       letter-spacing: -0.01em;
     }
 
-    .ch-meta { font-size: 11px; color: var(--text-dim); margin-top: 3px; font-weight: 300; }
+    .ch-meta {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 3px;
+      font-weight: 300;
+    }
 
     .ch-count {
       font-family: var(--font-serif);
@@ -398,9 +440,11 @@
     ══════════════════════════════ */
     .bottom-bar {
       position: fixed;
-      bottom: 0; left: 50%;
+      bottom: 0;
+      left: 50%;
       transform: translateX(-50%);
-      width: 100%; max-width: 480px;
+      width: 100%;
+      max-width: 480px;
       padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
       background: var(--bg);
       border-top: 1px solid var(--border-mid);
@@ -421,7 +465,10 @@
       transition: transform 0.12s, filter 0.12s;
     }
 
-    .btn:active { transform: scale(0.96); filter: brightness(0.94); }
+    .btn:active {
+      transform: scale(0.96);
+      filter: brightness(0.94);
+    }
 
     .btn-complete {
       background: var(--green);
@@ -449,7 +496,8 @@
        BOTTOM SHEETS
     ══════════════════════════════ */
     .sheet-overlay {
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       z-index: 300;
       display: flex;
       align-items: flex-end;
@@ -458,11 +506,15 @@
       transition: opacity 0.22s;
     }
 
-    .sheet-overlay.open { opacity: 1; pointer-events: all; }
+    .sheet-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
 
     .sheet-backdrop {
-      position: absolute; inset: 0;
-      background: rgba(26,46,40,0.55);
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 46, 40, 0.55);
       backdrop-filter: blur(2px);
     }
 
@@ -475,13 +527,16 @@
       max-height: 86vh;
       overflow-y: auto;
       transform: translateY(16px);
-      transition: transform 0.26s cubic-bezier(.22,1,.36,1);
+      transition: transform 0.26s cubic-bezier(.22, 1, .36, 1);
     }
 
-    .sheet-overlay.open .sheet-panel { transform: translateY(0); }
+    .sheet-overlay.open .sheet-panel {
+      transform: translateY(0);
+    }
 
     .sheet-handle {
-      width: 36px; height: 4px;
+      width: 36px;
+      height: 4px;
       background: var(--border-mid);
       border-radius: 2px;
       margin: 0 auto 18px;
@@ -531,7 +586,9 @@
       transition: border-color 0.15s;
     }
 
-    .alias-textarea:focus { border-color: var(--green); }
+    .alias-textarea:focus {
+      border-color: var(--green);
+    }
 
     .alias-count {
       font-family: var(--font-mono);
@@ -549,6 +606,7 @@
       border-radius: 9px;
       overflow: hidden;
     }
+
     .sheet-tab {
       flex: 1;
       background: none;
@@ -561,9 +619,20 @@
       transition: background 0.15s, color 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
-    .sheet-tab.active { background: var(--green); color: var(--bg); font-weight: 500; }
-    .sheet-tab-panel { display: none; }
-    .sheet-tab-panel.active { display: block; }
+
+    .sheet-tab.active {
+      background: var(--green);
+      color: var(--bg);
+      font-weight: 500;
+    }
+
+    .sheet-tab-panel {
+      display: none;
+    }
+
+    .sheet-tab-panel.active {
+      display: block;
+    }
 
     /* 규칙 목록 */
     .rule-list {
@@ -573,6 +642,7 @@
       flex-direction: column;
       gap: 3px;
     }
+
     .rule-item {
       display: flex;
       align-items: baseline;
@@ -582,6 +652,7 @@
       border-radius: 8px;
       border: 1px solid var(--border);
     }
+
     .rule-canonical {
       font-family: var(--font-sans);
       font-size: 13px;
@@ -590,6 +661,7 @@
       min-width: 100px;
       flex-shrink: 0;
     }
+
     .rule-keywords {
       font-family: var(--font-mono);
       font-size: 10px;
@@ -598,7 +670,11 @@
       flex: 1;
     }
 
-    .sheet-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .sheet-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
 
     .btn-sheet-save {
       flex: 1;
@@ -629,20 +705,24 @@
        CONFIRM DIALOG
     ══════════════════════════════ */
     .confirm-overlay {
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       z-index: 500;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: rgba(26,46,40,0.6);
+      background: rgba(26, 46, 40, 0.6);
       backdrop-filter: blur(4px);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
     }
 
-    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
 
     .confirm-box {
       background: var(--bg);
@@ -652,12 +732,18 @@
       width: 100%;
       max-width: 320px;
       transform: translateY(8px) scale(0.97);
-      transition: transform 0.22s cubic-bezier(.22,1,.36,1);
+      transition: transform 0.22s cubic-bezier(.22, 1, .36, 1);
     }
 
-    .confirm-overlay.open .confirm-box { transform: translateY(0) scale(1); }
+    .confirm-overlay.open .confirm-box {
+      transform: translateY(0) scale(1);
+    }
 
-    .confirm-icon { font-size: 32px; text-align: center; margin-bottom: 12px; }
+    .confirm-icon {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
 
     .confirm-title {
       font-family: var(--font-serif);
@@ -678,7 +764,10 @@
       font-weight: 300;
     }
 
-    .confirm-actions { display: flex; gap: 8px; }
+    .confirm-actions {
+      display: flex;
+      gap: 8px;
+    }
 
     .btn-confirm-ok {
       flex: 1;
@@ -709,7 +798,8 @@
     ══════════════════════════════ */
     .toast {
       position: fixed;
-      top: 64px; left: 50%;
+      top: 64px;
+      left: 50%;
       transform: translateX(-50%) translateY(-8px);
       background: var(--green);
       color: var(--bg);
@@ -726,342 +816,355 @@
       max-width: calc(100vw - 32px);
     }
 
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .toast.ok   { background: var(--success); }
-    .toast.warn { background: var(--warn); }
-    .toast.info { background: var(--info); }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.ok {
+      background: var(--success);
+    }
+
+    .toast.warn {
+      background: var(--warn);
+    }
+
+    .toast.info {
+      background: var(--info);
+    }
   </style>
 </head>
+
 <body>
 
-<!-- ── HEADER ── -->
-<div class="app-header">
-  <div class="header-top">
-    <span class="app-name">신규입고 입력기</span>
-    <span class="app-version">MARKET IN U</span>
-  </div>
-
-  <div class="usage-box">
-    <strong>브랜드 약칭 + 가격</strong>을 한 칸에 입력 (가격은 천원 단위)<br>
-    브랜드 없는 물건은 숫자만 입력
-    <div class="usage-examples">
-      <span class="ex-chip">나이 34</span>
-      <span class="ex-chip">아디 28</span>
-      <span class="ex-chip">25</span>
-      <span class="ex-chip">폴로 120</span>
+  <!-- ── HEADER ── -->
+  <div class="app-header">
+    <div class="header-top">
+      <span class="app-name">신규입고 입력기</span>
+      <span class="app-version">MARKET IN U</span>
     </div>
-  </div>
 
-  <div class="hanger-setup">
-    <div class="setup-field">
-      <label>Rack No.</label>
-      <input type="text" id="hangerNum" class="setup-input" placeholder="예: 2" inputmode="numeric">
-    </div>
-    <div class="setup-field">
-      <label>Category</label>
-      <input type="text" id="hangerCat" class="setup-input" placeholder="예: 스웨터">
-    </div>
-  </div>
-</div>
-
-<!-- ── STATS ── -->
-<div class="stats-bar">
-  <div class="stat-item">
-    <span class="stat-num" id="sNow">0</span>
-    <span class="stat-label">현재 행거</span>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num" id="sTotal">0</span>
-    <span class="stat-label">전체 누계</span>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num" id="sDone">0</span>
-    <span class="stat-label">완료 행거</span>
-  </div>
-</div>
-
-<!-- ── SAVE BAR ── -->
-<div class="save-bar">
-  <div class="save-dot" id="saveDot"></div>
-  <span id="saveLabel">자동저장 대기 중</span>
-</div>
-
-<div id="restoreBanner" style="display:none"></div>
-
-<div class="items-list" id="itemsList"></div>
-
-<div class="completed-section" id="completedSection" style="display:none">
-  <div class="section-title">완료된 행거</div>
-  <div id="completedList"></div>
-</div>
-
-<!-- ── BOTTOM BAR ── -->
-<div class="bottom-bar">
-  <button class="btn btn-icon" id="btnAliases">🏷</button>
-  <button class="btn btn-complete" id="btnComplete" disabled>행거 완료</button>
-  <button class="btn btn-icon" id="btnDownload">📥</button>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- ── ALIAS SHEET ── -->
-<div class="sheet-overlay" id="aliasSheet">
-  <div class="sheet-backdrop" id="aliasBackdrop"></div>
-  <div class="sheet-panel">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title">브랜드 약칭 규칙</div>
-    <div class="sheet-tabs">
-      <button class="sheet-tab active" id="tabView">현재 규칙 보기</button>
-      <button class="sheet-tab" id="tabEdit">오버라이드 편집</button>
-    </div>
-    <div class="sheet-tab-panel active" id="panelView">
-      <div class="alias-count" id="ruleTotal" style="margin-bottom:8px;text-align:left"></div>
-      <div class="rule-list" id="ruleList"></div>
-    </div>
-    <div class="sheet-tab-panel" id="panelEdit">
-      <div class="sheet-desc">
-        형식: <code>약칭1, 약칭2 = 정식브랜드명</code><br>
-        여러 약칭은 쉼표로 구분. 기본 규칙은 HTML 파일에 내장돼 있어요.<br>
-        팀 공통 규칙은 HTML 파일을 수정하세요.
+    <div class="usage-box">
+      <strong>브랜드 약칭 + 가격</strong>을 한 칸에 입력 (가격은 천원 단위)<br>
+      브랜드 없는 물건은 숫자만 입력
+      <div class="usage-examples">
+        <span class="ex-chip">나이 34</span>
+        <span class="ex-chip">아디 28</span>
+        <span class="ex-chip">25</span>
+        <span class="ex-chip">폴로 120</span>
       </div>
-      <textarea class="alias-textarea" id="aliasTa" spellcheck="false"></textarea>
-      <div class="alias-count" id="aliasCount"></div>
-      <div class="sheet-actions">
-        <button class="btn-sheet-cancel" id="btnAliasReset">기본값으로</button>
-        <button class="btn-sheet-cancel" id="btnAliasCancel">취소</button>
-        <button class="btn-sheet-save" id="btnAliasSave">저장</button>
+    </div>
+
+    <div class="hanger-setup">
+      <div class="setup-field">
+        <label>Rack No.</label>
+        <input type="text" id="hangerNum" class="setup-input" placeholder="예: 2" inputmode="numeric">
+      </div>
+      <div class="setup-field">
+        <label>Category</label>
+        <input type="text" id="hangerCat" class="setup-input" placeholder="예: 스웨터">
       </div>
     </div>
   </div>
-</div>
 
-<!-- ── CONFIRM DIALOG ── -->
-<div class="confirm-overlay" id="confirmDialog">
-  <div class="confirm-box">
-    <div class="confirm-icon" id="confirmIcon">📥</div>
-    <div class="confirm-title" id="confirmTitle"></div>
-    <div class="confirm-msg" id="confirmMsg"></div>
-    <div class="confirm-actions">
-      <button class="btn-confirm-cancel" id="confirmCancel">취소</button>
-      <button class="btn-confirm-ok" id="confirmOk">확인</button>
+  <!-- ── STATS ── -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num" id="sNow">0</span>
+      <span class="stat-label">현재 행거</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="sTotal">0</span>
+      <span class="stat-label">전체 누계</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="sDone">0</span>
+      <span class="stat-label">완료 행거</span>
     </div>
   </div>
-</div>
 
-<script>
-// ══════════════════════════════════════════════════════════
-//  ★ 브랜드 약칭 규칙 (이 파일 수정 → 전원 자동 적용)
-// ══════════════════════════════════════════════════════════
-const BUILT_IN_ALIAS_TEXT = `나이, 나이키, 이키, nike = 나이키
-아디, 아디다, 다스 = 아디다스
-폴로, 랄프, 랄프로렌, 폴 = 폴로 랄프로렌
-타미, 힐피거 = 타미힐피거
-갭 = 갭
-리바이, 리바이스, 리바 = 리바이스
-캘빈, 클라인 = 캘빈클라인
-뉴발, 뉴발란스 = 뉴발란스
-컨버스, 컨버 = 컨버스
-반스 = 반스
-노페, 노스페이스, 노스 = 노스페이스
-파타 = 파타고니아
-아크, 아크테릭스 = 아크테릭스
-콜럼비아, 콜럼 = 콜럼비아
-몽클 = 몽클레어
-버버리, 버버 = 버버리
-구찌, 찌 = 구찌
-프라다, 프라 = 프라다
-생로랑, 생로 = 생로랑
-발렌, 발렌시아가 = 발렌시아가
-지방시, 지방 = 지방시
-셀린, 셀린느 = 셀린느
-막스, 막스마라 = 막스마라
-코치 = 코치
-마이클, 마코 = 마이클코어스
-마르니, 마르 = 마르니
-아크네 = 아크네
-메종, 마르지 = 메종마르지엘라
-오프, 오프화 = 오프화이트
-스톤, 스톤아 = 스톤아일랜드
-아미 = 아미
-라코, 라코스 = 라코스테
-프레드, 프페 = 프레드페리
-챔피 = 챔피언
-슈프 = 슈프림
-스투, 스튜 = 스투시
-칼하 = 칼하트
-디키 = 디키즈
-빈폴 = 빈폴
-헤지 = 헤지스
-유니클로, 유니 = 유니클로
-꼼데, 꼼데가르송 = 꼼데가르송
-사카 = 사카이
-니들, needles = 니들즈
-아더, 아더에러 = 아더에러
-커버, covernat = 커버낫
-마하, 마하그리드 = 마하그리드
-버즈, 버즈릭 = 버즈릭슨`;
+  <!-- ── SAVE BAR ── -->
+  <div class="save-bar">
+    <div class="save-dot" id="saveDot"></div>
+    <span id="saveLabel">자동저장 대기 중</span>
+  </div>
 
-// ── Alias Engine ──
-let aliasMap = {};
+  <div id="restoreBanner" style="display:none"></div>
 
-function parseAliasText(text) {
-  const map = {};
-  text.split('\n').forEach(line => {
-    line = line.trim();
-    if (!line || line.startsWith('//') || line.startsWith('#')) return;
-    const eq = line.indexOf('=');
-    if (eq < 0) return;
-    const kws = line.slice(0, eq).split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-    const canonical = line.slice(eq + 1).trim();
-    if (!canonical) return;
-    kws.forEach(k => { map[k] = canonical; });
-  });
-  return map;
-}
+  <div class="items-list" id="itemsList"></div>
 
-function resolveBrand(raw) {
-  if (!raw || !raw.trim()) return '';
-  const lower = raw.trim().toLowerCase();
-  if (aliasMap[lower]) return aliasMap[lower];
-  const keys = Object.keys(aliasMap).sort((a,b) => b.length - a.length);
-  for (const k of keys) { if (lower === k || lower.includes(k)) return aliasMap[k]; }
-  return raw.trim();
-}
+  <div class="completed-section" id="completedSection" style="display:none">
+    <div class="section-title">완료된 행거</div>
+    <div id="completedList"></div>
+  </div>
 
-function loadAliases() {
-  const builtIn = parseAliasText(BUILT_IN_ALIAS_TEXT);
-  try {
-    const ov = localStorage.getItem('vshop_alias_override');
-    aliasMap = ov ? { ...builtIn, ...parseAliasText(ov) } : builtIn;
-  } catch(e) { aliasMap = builtIn; }
-}
+  <!-- ── BOTTOM BAR ── -->
+  <div class="bottom-bar">
+    <button class="btn btn-icon" id="btnAliases">🏷</button>
+    <button class="btn btn-complete" id="btnComplete" disabled>행거 완료</button>
+    <button class="btn btn-icon" id="btnDownload">📥</button>
+  </div>
 
-loadAliases();
+  <div class="toast" id="toast"></div>
 
-// ── Parser ──
-function parseInput(val) {
-  val = (val || '').trim();
-  if (!val) return { brandRaw: '', price: null };
-  const parts = val.split(/\s+/);
-  const last = parts[parts.length - 1];
-  if (/^\d+$/.test(last)) return { brandRaw: parts.slice(0,-1).join(' '), price: parseInt(last,10)*1000 };
-  return { brandRaw: val, price: null };
-}
+  <!-- ── ALIAS SHEET ── -->
+  <div class="sheet-overlay" id="aliasSheet">
+    <div class="sheet-backdrop" id="aliasBackdrop"></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">브랜드 약칭 규칙</div>
+      <div class="sheet-tabs">
+        <button class="sheet-tab active" id="tabView">현재 규칙 보기</button>
+        <button class="sheet-tab" id="tabEdit">오버라이드 편집</button>
+      </div>
+      <div class="sheet-tab-panel active" id="panelView">
+        <div class="alias-count" id="ruleTotal" style="margin-bottom:8px;text-align:left"></div>
+        <div class="rule-list" id="ruleList"></div>
+      </div>
+      <div class="sheet-tab-panel" id="panelEdit">
+        <div class="sheet-desc">
+          형식: <code>약칭1, 약칭2 = 정식브랜드명</code><br>
+          여러 약칭은 쉼표로 구분. 기본 규칙은 HTML 파일에 내장돼 있어요.<br>
+          팀 공통 규칙은 HTML 파일을 수정하세요.
+        </div>
+        <textarea class="alias-textarea" id="aliasTa" spellcheck="false"></textarea>
+        <div class="alias-count" id="aliasCount"></div>
+        <div class="sheet-actions">
+          <button class="btn-sheet-cancel" id="btnAliasReset">기본값으로</button>
+          <button class="btn-sheet-cancel" id="btnAliasCancel">취소</button>
+          <button class="btn-sheet-save" id="btnAliasSave">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-// ── State ──
-const PRERENDER = 60, EXTEND_AT = 12, AUTOSAVE_KEY = 'vshop_session';
-let data = [], renderedCount = 0, activeMax = 0, completedHangers = [];
-let autoSaveTimer = null, hasUnsaved = false;
+  <!-- ── CONFIRM DIALOG ── -->
+  <div class="confirm-overlay" id="confirmDialog">
+    <div class="confirm-box">
+      <div class="confirm-icon" id="confirmIcon">📥</div>
+      <div class="confirm-title" id="confirmTitle"></div>
+      <div class="confirm-msg" id="confirmMsg"></div>
+      <div class="confirm-actions">
+        <button class="btn-confirm-cancel" id="confirmCancel">취소</button>
+        <button class="btn-confirm-ok" id="confirmOk">확인</button>
+      </div>
+    </div>
+  </div>
 
-// ── Auto-Save ──
-function scheduleAutoSave() {
-  hasUnsaved = true; setSaveDot('saving');
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer = setTimeout(doAutoSave, 1200);
-}
+  <script>
+    // ══════════════════════════════════════════════════════════
+    //  ★ 브랜드 약칭 규칙 (이 파일 수정 → 전원 자동 적용)
+    // ══════════════════════════════════════════════════════════
+    const BUILT_IN_ALIAS_TEXT = ``나이, 나이키, 이키, nike = 나이키
+    아디, 아디다, 다스 = 아디다스
+    폴로, 랄프, 랄프로렌, 폴 = 폴로 랄프로렌
+    타미, 힐피거 = 타미힐피거
+    갭 = 갭
+    리바이, 리바이스, 리바 = 리바이스
+    캘빈, 클라인 = 캘빈클라인
+    뉴발, 뉴발란스 = 뉴발란스
+    컨버스, 컨버 = 컨버스
+    반스 = 반스
+    노페, 노스페이스, 노스 = 노스페이스
+    파타 = 파타고니아
+    아크, 아크테릭스 = 아크테릭스
+    콜럼비아, 콜럼 = 콜럼비아
+    몽클 = 몽클레어
+    버버리, 버버 = 버버리
+    구찌, 찌 = 구찌
+    프라다, 프라 = 프라다
+    생로랑, 생로 = 생로랑
+    발렌, 발렌시아가 = 발렌시아가
+    지방시, 지방 = 지방시
+    셀린, 셀린느 = 셀린느
+    막스, 막스마라 = 막스마라
+    코치 = 코치
+    마이클, 마코 = 마이클코어스
+    마르니, 마르 = 마르니
+    아크네 = 아크네
+    메종, 마르지 = 메종마르지엘라
+    오프, 오프화 = 오프화이트
+    스톤, 스톤아 = 스톤아일랜드
+    아미 = 아미
+    라코, 라코스 = 라코스테
+    프레드, 프페 = 프레드페리
+    챔피 = 챔피언
+    슈프 = 슈프림
+    스투, 스튜 = 스투시
+    칼하 = 칼하트
+    디키 = 디키즈
+    빈폴 = 빈폴
+    헤지 = 헤지스
+    유니클로, 유니 = 유니클로
+    꼼데, 꼼데가르송 = 꼼데가르송
+    사카 = 사카이
+    니들, needles = 니들즈
+    아더, 아더에러 = 아더에러
+    커버, covernat = 커버낫
+    마하, 마하그리드 = 마하그리드
+    버즈, 버즈릭 = 버즈릭슨``;
 
-function doAutoSave() {
-  try {
-    const session = {
-      hangerNum: document.getElementById('hangerNum').value,
-      hangerCat: document.getElementById('hangerCat').value,
-      data: data.slice(0, Math.max(activeMax+2,1)).map(d=>({ raw: d.raw||'' })),
-      activeMax, completedHangers, savedAt: Date.now(),
-    };
-    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(session));
-    hasUnsaved = false; setSaveDot('saved');
-    const t = new Date();
-    document.getElementById('saveLabel').textContent =
-      `자동저장 ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
-    setTimeout(()=>{ if(!hasUnsaved) setSaveDot(''); }, 3000);
-  } catch(e) {
-    setSaveDot('');
-    document.getElementById('saveLabel').textContent = '저장 실패';
-  }
-}
+    // ── Alias Engine ──
+    let aliasMap = {};
 
-function setSaveDot(s) {
-  document.getElementById('saveDot').className = 'save-dot' + (s ? ` ${s}` : '');
-}
+    function parseAliasText(text) {
+      const map = {};
+      text.split('\n').forEach(line => {
+        line = line.trim();
+        if (!line || line.startsWith('//') || line.startsWith('#')) return;
+        const eq = line.indexOf('=');
+        if (eq < 0) return;
+        const kws = line.slice(0, eq).split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        const canonical = line.slice(eq + 1).trim();
+        if (!canonical) return;
+        kws.forEach(k => { map[k] = canonical; });
+      });
+      return map;
+    }
 
-function clearAutoSave() {
-  try { localStorage.removeItem(AUTOSAVE_KEY); } catch(e) {}
-  hasUnsaved = false; setSaveDot('');
-  document.getElementById('saveLabel').textContent = '자동저장 대기 중';
-}
+    function resolveBrand(raw) {
+      if (!raw || !raw.trim()) return '';
+      const lower = raw.trim().toLowerCase();
+      if (aliasMap[lower]) return aliasMap[lower];
+      const keys = Object.keys(aliasMap).sort((a, b) => b.length - a.length);
+      for (const k of keys) { if (lower === k || lower.includes(k)) return aliasMap[k]; }
+      return raw.trim();
+    }
 
-// ── Restore ──
-function tryRestore() {
-  try {
-    const raw = localStorage.getItem(AUTOSAVE_KEY);
-    if (!raw) return false;
-    const session = JSON.parse(raw);
-    if (!session?.data?.length) return false;
-    const filledCount = session.data.filter(d=>d.raw?.trim()).length;
-    const completedCount = (session.completedHangers||[]).length;
-    if (!filledCount && !completedCount) return false;
+    function loadAliases() {
+      const builtIn = parseAliasText(BUILT_IN_ALIAS_TEXT);
+      try {
+        const ov = localStorage.getItem('vshop_alias_override');
+        aliasMap = ov ? { ...builtIn, ...parseAliasText(ov) } : builtIn;
+      } catch (e) { aliasMap = builtIn; }
+    }
 
-    const elapsed = Date.now() - (session.savedAt||0);
-    const when = elapsed < 60000 ? '방금 전' : elapsed < 3600000 ? `${Math.floor(elapsed/60000)}분 전` : `${Math.floor(elapsed/3600000)}시간 전`;
+    loadAliases();
 
-    document.getElementById('hangerNum').value = session.hangerNum||'';
-    document.getElementById('hangerCat').value = session.hangerCat||'';
-    completedHangers = session.completedHangers||[];
-    data=[]; renderedCount=0; activeMax=session.activeMax||0;
-    document.getElementById('itemsList').innerHTML='';
+    // ── Parser ──
+    function parseInput(val) {
+      val = (val || '').trim();
+      if (!val) return { brandRaw: '', price: null };
+      const parts = val.split(/\s+/);
+      const last = parts[parts.length - 1];
+      if (/^\d+$/.test(last)) return { brandRaw: parts.slice(0, -1).join(' '), price: parseInt(last, 10) * 1000 };
+      return { brandRaw: val, price: null };
+    }
 
-    renderRows(Math.max(session.data.length, PRERENDER));
+    // ── State ──
+    const PRERENDER = 60, EXTEND_AT = 12, AUTOSAVE_KEY = 'vshop_session';
+    let data = [], renderedCount = 0, activeMax = 0, completedHangers = [];
+    let autoSaveTimer = null, hasUnsaved = false;
 
-    session.data.forEach((d,i) => {
-      if (!d.raw) return;
-      const row = document.querySelector(`.item-row[data-i="${i}"]`);
-      if (!row) return;
-      const input = row.querySelector('.combo-input');
-      if (input) { input.value = d.raw; input.dispatchEvent(new Event('input')); }
-    });
+    // ── Auto-Save ──
+    function scheduleAutoSave() {
+      hasUnsaved = true; setSaveDot('saving');
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(doAutoSave, 1200);
+    }
 
-    document.querySelectorAll('.item-row').forEach(r => {
-      if (parseInt(r.dataset.i) <= activeMax) r.classList.remove('future');
-    });
+    function doAutoSave() {
+      try {
+        const session = {
+          hangerNum: document.getElementById('hangerNum').value,
+          hangerCat: document.getElementById('hangerCat').value,
+          data: data.slice(0, Math.max(activeMax + 2, 1)).map(d => ({ raw: d.raw || '' })),
+          activeMax, completedHangers, savedAt: Date.now(),
+        };
+        localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(session));
+        hasUnsaved = false; setSaveDot('saved');
+        const t = new Date();
+        document.getElementById('saveLabel').textContent =
+          `자동저장 ${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}:${String(t.getSeconds()).padStart(2, '0')}`;
+        setTimeout(() => { if (!hasUnsaved) setSaveDot(''); }, 3000);
+      } catch (e) {
+        setSaveDot('');
+        document.getElementById('saveLabel').textContent = '저장 실패';
+      }
+    }
 
-    renderCompleted(); updateStats();
+    function setSaveDot(s) {
+      document.getElementById('saveDot').className = 'save-dot' + (s ? ` ${s}` : '');
+    }
 
-    const banner = document.getElementById('restoreBanner');
-    let msg = `<span class="restore-text">💾 <strong>${when}</strong> 작업 불러옴`;
-    if (completedCount) msg += ` — 완료 ${completedCount}개 행거`;
-    if (filledCount)    msg += `, 현재 ${filledCount}개 입력`;
-    msg += `</span>`;
-    banner.innerHTML = `<div class="restore-banner">${msg}<button class="btn-restore-dismiss" id="btnRestoreDismiss">확인</button></div>`;
-    banner.style.display = 'block';
-    document.getElementById('btnRestoreDismiss').addEventListener('click', ()=>{ banner.style.display='none'; });
-    return true;
-  } catch(e) { return false; }
-}
+    function clearAutoSave() {
+      try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) { }
+      hasUnsaved = false; setSaveDot('');
+      document.getElementById('saveLabel').textContent = '자동저장 대기 중';
+    }
 
-// ── Init ──
-function resetCurrentHanger() {
-  data=[]; renderedCount=0; activeMax=0;
-  document.getElementById('itemsList').innerHTML='';
-  renderRows(PRERENDER); updateStats();
-  setTimeout(()=>{ const f=document.querySelector('.combo-input'); if(f) f.focus(); }, 120);
-  scheduleAutoSave();
-}
+    // ── Restore ──
+    function tryRestore() {
+      try {
+        const raw = localStorage.getItem(AUTOSAVE_KEY);
+        if (!raw) return false;
+        const session = JSON.parse(raw);
+        if (!session?.data?.length) return false;
+        const filledCount = session.data.filter(d => d.raw?.trim()).length;
+        const completedCount = (session.completedHangers || []).length;
+        if (!filledCount && !completedCount) return false;
 
-// ── Render Rows ──
-function renderRows(count) {
-  const list = document.getElementById('itemsList');
-  for (let i=0; i<count; i++) {
-    const index = renderedCount;
-    if (data.length <= index) data.push({ raw:'', brandRaw:'', price:null });
+        const elapsed = Date.now() - (session.savedAt || 0);
+        const when = elapsed < 60000 ? '방금 전' : elapsed < 3600000 ? `${Math.floor(elapsed / 60000)}분 전` : `${Math.floor(elapsed / 3600000)}시간 전`;
 
-    const row = document.createElement('div');
-    row.className = 'item-row future';
-    row.dataset.i = index;
+        document.getElementById('hangerNum').value = session.hangerNum || '';
+        document.getElementById('hangerCat').value = session.hangerCat || '';
+        completedHangers = session.completedHangers || [];
+        data = []; renderedCount = 0; activeMax = session.activeMax || 0;
+        document.getElementById('itemsList').innerHTML = '';
 
-    row.innerHTML = `
-      <span class="item-num">${index+1}</span>
+        renderRows(Math.max(session.data.length, PRERENDER));
+
+        session.data.forEach((d, i) => {
+          if (!d.raw) return;
+          const row = document.querySelector(`.item-row[data-i="${i}"]`);
+          if (!row) return;
+          const input = row.querySelector('.combo-input');
+          if (input) { input.value = d.raw; input.dispatchEvent(new Event('input')); }
+        });
+
+        document.querySelectorAll('.item-row').forEach(r => {
+          if (parseInt(r.dataset.i) <= activeMax) r.classList.remove('future');
+        });
+
+        renderCompleted(); updateStats();
+
+        const banner = document.getElementById('restoreBanner');
+        let msg = `<span class="restore-text">💾 <strong>${when}</strong> 작업 불러옴`;
+        if (completedCount) msg += ` — 완료 ${completedCount}개 행거`;
+        if (filledCount) msg += `, 현재 ${filledCount}개 입력`;
+        msg += `</span>`;
+        banner.innerHTML = `<div class="restore-banner">${msg}<button class="btn-restore-dismiss" id="btnRestoreDismiss">확인</button></div>`;
+        banner.style.display = 'block';
+        document.getElementById('btnRestoreDismiss').addEventListener('click', () => { banner.style.display = 'none'; });
+        return true;
+      } catch (e) { return false; }
+    }
+
+    // ── Init ──
+    function resetCurrentHanger() {
+      data = []; renderedCount = 0; activeMax = 0;
+      document.getElementById('itemsList').innerHTML = '';
+      renderRows(PRERENDER); updateStats();
+      setTimeout(() => { const f = document.querySelector('.combo-input'); if (f) f.focus(); }, 120);
+      scheduleAutoSave();
+    }
+
+    // ── Render Rows ──
+    function renderRows(count) {
+      const list = document.getElementById('itemsList');
+      for (let i = 0; i < count; i++) {
+        const index = renderedCount;
+        if (data.length <= index) data.push({ raw: '', brandRaw: '', price: null });
+
+        const row = document.createElement('div');
+        row.className = 'item-row future';
+        row.dataset.i = index;
+
+        row.innerHTML = `
+      <span class="item-num">${index + 1}</span>
       <input class="combo-input" type="text" inputmode="text"
-        placeholder="${index===0 ? '예: 나이 34  또는  25' : ''}"
+        placeholder="${index === 0 ? '예: 나이 34  또는  25' : ''}"
         autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
       <div class="parse-badge">
         <div class="parse-inner">
@@ -1070,262 +1173,263 @@ function renderRows(count) {
         </div>
       </div>`;
 
-    const input = row.querySelector('.combo-input');
-    const bp    = row.querySelector('.badge-price');
-    const bb    = row.querySelector('.badge-brand');
+        const input = row.querySelector('.combo-input');
+        const bp = row.querySelector('.badge-price');
+        const bb = row.querySelector('.badge-brand');
 
-    input.addEventListener('focus', () => onFocus(index));
+        input.addEventListener('focus', () => onFocus(index));
 
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        // 다음 행으로 포커스 이동
-        const next = document.querySelector(`.item-row[data-i="${index + 1}"] .combo-input`);
-        if (next) next.focus();
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            // 다음 행으로 포커스 이동
+            const next = document.querySelector(`.item-row[data-i="${index + 1}"] .combo-input`);
+            if (next) next.focus();
+          }
+        });
+
+        input.addEventListener('input', () => {
+          const parsed = parseInput(input.value);
+          if (!data[index]) data[index] = {};
+          data[index].raw = input.value;
+          data[index].brandRaw = parsed.brandRaw;
+          data[index].price = parsed.price;
+          if (parsed.price !== null) {
+            bp.textContent = (parsed.price / 1000) + 'K';
+            const res = resolveBrand(parsed.brandRaw);
+            bb.textContent = res || '';
+            row.classList.add('has-data');
+            row.classList.toggle('has-brand', !!(res && parsed.brandRaw));
+          } else {
+            bp.textContent = ''; bb.textContent = '';
+            row.classList.remove('has-data', 'has-brand');
+          }
+          updateStats(); scheduleAutoSave();
+        });
+
+        list.appendChild(row);
+        renderedCount++;
       }
-    });
+    }
 
-    input.addEventListener('input', () => {
-      const parsed = parseInput(input.value);
-      if (!data[index]) data[index] = {};
-      data[index].raw = input.value;
-      data[index].brandRaw = parsed.brandRaw;
-      data[index].price = parsed.price;
-      if (parsed.price !== null) {
-        bp.textContent = (parsed.price/1000)+'K';
-        const res = resolveBrand(parsed.brandRaw);
-        bb.textContent = res||'';
-        row.classList.add('has-data');
-        row.classList.toggle('has-brand', !!(res && parsed.brandRaw));
-      } else {
-        bp.textContent=''; bb.textContent='';
-        row.classList.remove('has-data','has-brand');
-      }
+    function onFocus(index) {
+      if (index > activeMax) activeMax = index;
+      document.querySelectorAll('.item-row').forEach(r => {
+        r.classList.remove('current');
+        parseInt(r.dataset.i) <= activeMax ? r.classList.remove('future') : r.classList.add('future');
+      });
+      const row = document.querySelector(`.item-row[data-i="${index}"]`);
+      if (row) { row.classList.add('current'); row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      if (renderedCount - index <= EXTEND_AT) renderRows(PRERENDER);
       updateStats(); scheduleAutoSave();
+    }
+
+    function updateStats() {
+      const filled = data.slice(0, activeMax + 1).filter(d => d?.price !== null && d?.price !== undefined);
+      document.getElementById('sNow').textContent = filled.length;
+      const total = completedHangers.reduce((s, h) => s + h.items.length, 0) + filled.length;
+      document.getElementById('sTotal').textContent = total;
+      document.getElementById('sDone').textContent = completedHangers.length;
+      const can = filled.length > 0
+        && document.getElementById('hangerNum').value.trim()
+        && document.getElementById('hangerCat').value.trim();
+      document.getElementById('btnComplete').disabled = !can;
+    }
+
+    // ── Hanger Complete ──
+    document.getElementById('btnComplete').addEventListener('click', () => {
+      const num = document.getElementById('hangerNum').value.trim();
+      const cat = document.getElementById('hangerCat').value.trim();
+      if (!num || !cat) { showToast('행거 번호와 카테고리를 입력해주세요', 'warn'); return; }
+      const validItems = data.slice(0, activeMax + 1).filter(d => d?.price != null)
+        .map(d => ({ brandRaw: d.brandRaw || '', brand: resolveBrand(d.brandRaw || ''), price: d.price }));
+      if (!validItems.length) return;
+      completedHangers.push({ hangerNum: num, category: cat, items: validItems });
+      showToast(`${num}번 행거 완료 — ${validItems.length}벌`, 'ok');
+      renderCompleted();
+      document.getElementById('hangerNum').value = '';
+      document.getElementById('hangerCat').value = '';
+      resetCurrentHanger();
     });
 
-    list.appendChild(row);
-    renderedCount++;
-  }
-}
-
-function onFocus(index) {
-  if (index > activeMax) activeMax = index;
-  document.querySelectorAll('.item-row').forEach(r => {
-    r.classList.remove('current');
-    parseInt(r.dataset.i) <= activeMax ? r.classList.remove('future') : r.classList.add('future');
-  });
-  const row = document.querySelector(`.item-row[data-i="${index}"]`);
-  if (row) { row.classList.add('current'); row.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
-  if (renderedCount - index <= EXTEND_AT) renderRows(PRERENDER);
-  updateStats(); scheduleAutoSave();
-}
-
-function updateStats() {
-  const filled = data.slice(0, activeMax+1).filter(d=>d?.price!==null && d?.price!==undefined);
-  document.getElementById('sNow').textContent   = filled.length;
-  const total = completedHangers.reduce((s,h)=>s+h.items.length,0)+filled.length;
-  document.getElementById('sTotal').textContent = total;
-  document.getElementById('sDone').textContent  = completedHangers.length;
-  const can = filled.length>0
-    && document.getElementById('hangerNum').value.trim()
-    && document.getElementById('hangerCat').value.trim();
-  document.getElementById('btnComplete').disabled = !can;
-}
-
-// ── Hanger Complete ──
-document.getElementById('btnComplete').addEventListener('click', () => {
-  const num = document.getElementById('hangerNum').value.trim();
-  const cat = document.getElementById('hangerCat').value.trim();
-  if (!num||!cat) { showToast('행거 번호와 카테고리를 입력해주세요','warn'); return; }
-  const validItems = data.slice(0,activeMax+1).filter(d=>d?.price!=null)
-    .map(d=>({ brandRaw:d.brandRaw||'', brand:resolveBrand(d.brandRaw||''), price:d.price }));
-  if (!validItems.length) return;
-  completedHangers.push({ hangerNum:num, category:cat, items:validItems });
-  showToast(`${num}번 행거 완료 — ${validItems.length}벌`, 'ok');
-  renderCompleted();
-  document.getElementById('hangerNum').value='';
-  document.getElementById('hangerCat').value='';
-  resetCurrentHanger();
-});
-
-function renderCompleted() {
-  const sec  = document.getElementById('completedSection');
-  const list = document.getElementById('completedList');
-  if (!completedHangers.length) { sec.style.display='none'; return; }
-  sec.style.display='block'; list.innerHTML='';
-  [...completedHangers].reverse().forEach(h => {
-    const wb = h.items.filter(i=>i.brand).length;
-    const d = document.createElement('div');
-    d.className='completed-hanger';
-    d.innerHTML=`
+    function renderCompleted() {
+      const sec = document.getElementById('completedSection');
+      const list = document.getElementById('completedList');
+      if (!completedHangers.length) { sec.style.display = 'none'; return; }
+      sec.style.display = 'block'; list.innerHTML = '';
+      [...completedHangers].reverse().forEach(h => {
+        const wb = h.items.filter(i => i.brand).length;
+        const d = document.createElement('div');
+        d.className = 'completed-hanger';
+        d.innerHTML = `
       <div>
         <div class="ch-id">Rack ${h.hangerNum}</div>
-        <div class="ch-meta">${h.category}${wb?` · 브랜드 ${wb}개`:''}</div>
+        <div class="ch-meta">${h.category}${wb ? ` · 브랜드 ${wb}개` : ''}</div>
       </div>
       <span class="ch-count">${h.items.length}</span>`;
-    list.appendChild(d);
-  });
-  updateStats();
-}
+        list.appendChild(d);
+      });
+      updateStats();
+    }
 
-// ── Download ──
-document.getElementById('btnDownload').addEventListener('click', () => {
-  const totalFilled = completedHangers.reduce((s,h)=>s+h.items.length,0)
-    + data.slice(0,activeMax+1).filter(d=>d?.price!=null).length;
-  if (!totalFilled) { showToast('입력된 데이터가 없어요','warn'); return; }
-  showConfirm({
-    icon:'📥', title:'Excel 다운로드',
-    msg:`총 ${totalFilled}건을 저장합니다.\n저장 후 팀장에게 전송하세요.`,
-    okText:'다운로드', onOk:doDownload,
-  });
-});
-
-function doDownload() {
-  const rows=[]; let seq=1;
-  completedHangers.forEach(h=>{
-    h.items.forEach(item=>rows.push({ '행거번호':h.hangerNum,'순번':seq++,'브랜드(원문)':item.brandRaw,'브랜드(변환)':item.brand,'카테고리':h.category,'가격':item.price }));
-  });
-  const num=document.getElementById('hangerNum').value.trim();
-  const cat=document.getElementById('hangerCat').value.trim();
-  if (num&&cat) {
-    data.slice(0,activeMax+1).filter(d=>d?.price!=null).forEach(d=>{
-      rows.push({ '행거번호':`${num}(진행중)`,'순번':seq++,'브랜드(원문)':d.brandRaw||'','브랜드(변환)':resolveBrand(d.brandRaw||''),'카테고리':cat,'가격':d.price });
+    // ── Download ──
+    document.getElementById('btnDownload').addEventListener('click', () => {
+      const totalFilled = completedHangers.reduce((s, h) => s + h.items.length, 0)
+        + data.slice(0, activeMax + 1).filter(d => d?.price != null).length;
+      if (!totalFilled) { showToast('입력된 데이터가 없어요', 'warn'); return; }
+      showConfirm({
+        icon: '📥', title: 'Excel 다운로드',
+        msg: `총 ${totalFilled}건을 저장합니다.\n저장 후 팀장에게 전송하세요.`,
+        okText: '다운로드', onOk: doDownload,
+      });
     });
-  }
-  const ws=XLSX.utils.json_to_sheet(rows);
-  ws['!cols']=[{wch:10},{wch:7},{wch:14},{wch:18},{wch:12},{wch:10}];
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'신규입고');
-  const d=new Date();
-  const ds=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  XLSX.writeFile(wb,`입고_${ds}.xlsx`);
-  clearAutoSave(); completedHangers=[];
-  document.getElementById('hangerNum').value='';
-  document.getElementById('hangerCat').value='';
-  resetCurrentHanger(); renderCompleted();
-  document.getElementById('restoreBanner').style.display='none';
-  showToast(`${rows.length}건 저장 완료`,'ok');
-}
 
-// ── Alias Sheet ──
+    function doDownload() {
+      const rows = []; let seq = 1;
+      completedHangers.forEach(h => {
+        h.items.forEach(item => rows.push({ '행거번호': h.hangerNum, '순번': seq++, '브랜드(원문)': item.brandRaw, '브랜드(변환)': item.brand, '카테고리': h.category, '가격': item.price }));
+      });
+      const num = document.getElementById('hangerNum').value.trim();
+      const cat = document.getElementById('hangerCat').value.trim();
+      if (num && cat) {
+        data.slice(0, activeMax + 1).filter(d => d?.price != null).forEach(d => {
+          rows.push({ '행거번호': `${num}(진행중)`, '순번': seq++, '브랜드(원문)': d.brandRaw || '', '브랜드(변환)': resolveBrand(d.brandRaw || ''), '카테고리': cat, '가격': d.price });
+        });
+      }
+      const ws = XLSX.utils.json_to_sheet(rows);
+      ws['!cols'] = [{ wch: 10 }, { wch: 7 }, { wch: 14 }, { wch: 18 }, { wch: 12 }, { wch: 10 }];
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, '신규입고');
+      const d = new Date();
+      const ds = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+      XLSX.writeFile(wb, `입고_${ds}.xlsx`);
+      clearAutoSave(); completedHangers = [];
+      document.getElementById('hangerNum').value = '';
+      document.getElementById('hangerCat').value = '';
+      resetCurrentHanger(); renderCompleted();
+      document.getElementById('restoreBanner').style.display = 'none';
+      showToast(`${rows.length}건 저장 완료`, 'ok');
+    }
 
-// 탭 전환
-function switchTab(tab) {
-  document.querySelectorAll('.sheet-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.sheet-tab-panel').forEach(p=>p.classList.remove('active'));
-  if (tab === 'view') {
-    document.getElementById('tabView').classList.add('active');
-    document.getElementById('panelView').classList.add('active');
-    renderRuleList();
-  } else {
-    document.getElementById('tabEdit').classList.add('active');
-    document.getElementById('panelEdit').classList.add('active');
-  }
-}
+    // ── Alias Sheet ──
 
-document.getElementById('tabView').addEventListener('click', ()=>switchTab('view'));
-document.getElementById('tabEdit').addEventListener('click', ()=>switchTab('edit'));
+    // 탭 전환
+    function switchTab(tab) {
+      document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.sheet-tab-panel').forEach(p => p.classList.remove('active'));
+      if (tab === 'view') {
+        document.getElementById('tabView').classList.add('active');
+        document.getElementById('panelView').classList.add('active');
+        renderRuleList();
+      } else {
+        document.getElementById('tabEdit').classList.add('active');
+        document.getElementById('panelEdit').classList.add('active');
+      }
+    }
 
-// 현재 적용 중인 규칙 목록 렌더
-function renderRuleList() {
-  const list = document.getElementById('ruleList');
-  list.innerHTML = '';
+    document.getElementById('tabView').addEventListener('click', () => switchTab('view'));
+    document.getElementById('tabEdit').addEventListener('click', () => switchTab('edit'));
 
-  // aliasMap을 canonical → [keywords] 로 역매핑
-  const canonicalMap = {};
-  Object.entries(aliasMap).forEach(([kw, canonical]) => {
-    if (!canonicalMap[canonical]) canonicalMap[canonical] = [];
-    canonicalMap[canonical].push(kw);
-  });
+    // 현재 적용 중인 규칙 목록 렌더
+    function renderRuleList() {
+      const list = document.getElementById('ruleList');
+      list.innerHTML = '';
 
-  const entries = Object.entries(canonicalMap).sort((a,b)=>a[0].localeCompare(b[0],'ko'));
-  document.getElementById('ruleTotal').textContent = `총 ${entries.length}개 브랜드 규칙 적용 중`;
+      // aliasMap을 canonical → [keywords] 로 역매핑
+      const canonicalMap = {};
+      Object.entries(aliasMap).forEach(([kw, canonical]) => {
+        if (!canonicalMap[canonical]) canonicalMap[canonical] = [];
+        canonicalMap[canonical].push(kw);
+      });
 
-  entries.forEach(([canonical, kws]) => {
-    const d = document.createElement('div');
-    d.className = 'rule-item';
-    d.innerHTML = `
+      const entries = Object.entries(canonicalMap).sort((a, b) => a[0].localeCompare(b[0], 'ko'));
+      document.getElementById('ruleTotal').textContent = `총 ${entries.length}개 브랜드 규칙 적용 중`;
+
+      entries.forEach(([canonical, kws]) => {
+        const d = document.createElement('div');
+        d.className = 'rule-item';
+        d.innerHTML = `
       <span class="rule-canonical">${canonical}</span>
       <span class="rule-keywords">${kws.join(', ')}</span>
     `;
-    list.appendChild(d);
-  });
-}
+        list.appendChild(d);
+      });
+    }
 
-document.getElementById('btnAliases').addEventListener('click',()=>{
-  document.getElementById('aliasTa').value=localStorage.getItem('vshop_alias_override')||'';
-  updateAliasCount(document.getElementById('aliasTa').value);
-  switchTab('view'); // 열 때 항상 보기 탭 먼저
-  document.getElementById('aliasSheet').classList.add('open');
-});
-document.getElementById('aliasTa').addEventListener('input',e=>updateAliasCount(e.target.value));
-function updateAliasCount(text) {
-  const n=text.split('\n').filter(l=>l.trim()&&l.includes('=')).length;
-  document.getElementById('aliasCount').textContent=n?`이 기기 오버라이드 ${n}개`:'비어있으면 내장 규칙만 사용';
-}
-document.getElementById('btnAliasSave').addEventListener('click',()=>{
-  const text=document.getElementById('aliasTa').value.trim();
-  try { text?localStorage.setItem('vshop_alias_override',text):localStorage.removeItem('vshop_alias_override'); } catch(e){}
-  loadAliases(); document.getElementById('aliasSheet').classList.remove('open');
-  document.querySelectorAll('.item-row').forEach(row=>{
-    const i=parseInt(row.dataset.i); const d=data[i];
-    if(!d||d.price==null) return;
-    const badge=row.querySelector('.badge-brand');
-    if(badge) badge.textContent=resolveBrand(d.brandRaw||'')||'';
-  });
-  showToast('규칙 저장 완료','ok');
-});
-document.getElementById('btnAliasReset').addEventListener('click',()=>{
-  document.getElementById('aliasTa').value=''; updateAliasCount('');
-  showToast('저장 누르면 내장 규칙으로 돌아가요','info');
-});
-document.getElementById('btnAliasCancel').addEventListener('click',()=>document.getElementById('aliasSheet').classList.remove('open'));
-document.getElementById('aliasBackdrop').addEventListener('click',()=>document.getElementById('aliasSheet').classList.remove('open'));
+    document.getElementById('btnAliases').addEventListener('click', () => {
+      document.getElementById('aliasTa').value = localStorage.getItem('vshop_alias_override') || '';
+      updateAliasCount(document.getElementById('aliasTa').value);
+      switchTab('view'); // 열 때 항상 보기 탭 먼저
+      document.getElementById('aliasSheet').classList.add('open');
+    });
+    document.getElementById('aliasTa').addEventListener('input', e => updateAliasCount(e.target.value));
+    function updateAliasCount(text) {
+      const n = text.split('\n').filter(l => l.trim() && l.includes('=')).length;
+      document.getElementById('aliasCount').textContent = n ? `이 기기 오버라이드 ${n}개` : '비어있으면 내장 규칙만 사용';
+    }
+    document.getElementById('btnAliasSave').addEventListener('click', () => {
+      const text = document.getElementById('aliasTa').value.trim();
+      try { text ? localStorage.setItem('vshop_alias_override', text) : localStorage.removeItem('vshop_alias_override'); } catch (e) { }
+      loadAliases(); document.getElementById('aliasSheet').classList.remove('open');
+      document.querySelectorAll('.item-row').forEach(row => {
+        const i = parseInt(row.dataset.i); const d = data[i];
+        if (!d || d.price == null) return;
+        const badge = row.querySelector('.badge-brand');
+        if (badge) badge.textContent = resolveBrand(d.brandRaw || '') || '';
+      });
+      showToast('규칙 저장 완료', 'ok');
+    });
+    document.getElementById('btnAliasReset').addEventListener('click', () => {
+      document.getElementById('aliasTa').value = ''; updateAliasCount('');
+      showToast('저장 누르면 내장 규칙으로 돌아가요', 'info');
+    });
+    document.getElementById('btnAliasCancel').addEventListener('click', () => document.getElementById('aliasSheet').classList.remove('open'));
+    document.getElementById('aliasBackdrop').addEventListener('click', () => document.getElementById('aliasSheet').classList.remove('open'));
 
-// ── Confirm ──
-let confirmCallback=null;
-function showConfirm({icon,title,msg,okText='확인',onOk}) {
-  document.getElementById('confirmIcon').textContent=icon||'⚠️';
-  document.getElementById('confirmTitle').textContent=title;
-  document.getElementById('confirmMsg').textContent=msg;
-  document.getElementById('confirmOk').textContent=okText;
-  confirmCallback=onOk;
-  document.getElementById('confirmDialog').classList.add('open');
-}
-document.getElementById('confirmOk').addEventListener('click',()=>{
-  document.getElementById('confirmDialog').classList.remove('open');
-  if(confirmCallback){confirmCallback();confirmCallback=null;}
-});
-document.getElementById('confirmCancel').addEventListener('click',()=>{
-  document.getElementById('confirmDialog').classList.remove('open');
-  confirmCallback=null;
-});
+    // ── Confirm ──
+    let confirmCallback = null;
+    function showConfirm({ icon, title, msg, okText = '확인', onOk }) {
+      document.getElementById('confirmIcon').textContent = icon || '⚠️';
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmMsg').textContent = msg;
+      document.getElementById('confirmOk').textContent = okText;
+      confirmCallback = onOk;
+      document.getElementById('confirmDialog').classList.add('open');
+    }
+    document.getElementById('confirmOk').addEventListener('click', () => {
+      document.getElementById('confirmDialog').classList.remove('open');
+      if (confirmCallback) { confirmCallback(); confirmCallback = null; }
+    });
+    document.getElementById('confirmCancel').addEventListener('click', () => {
+      document.getElementById('confirmDialog').classList.remove('open');
+      confirmCallback = null;
+    });
 
-// ── Before Unload ──
-window.addEventListener('beforeunload',e=>{
-  const filled=data.slice(0,activeMax+1).filter(d=>d?.price!=null).length;
-  if(completedHangers.length+filled>0){e.preventDefault();e.returnValue='';}
-});
+    // ── Before Unload ──
+    window.addEventListener('beforeunload', e => {
+      const filled = data.slice(0, activeMax + 1).filter(d => d?.price != null).length;
+      if (completedHangers.length + filled > 0) { e.preventDefault(); e.returnValue = ''; }
+    });
 
-['hangerNum','hangerCat'].forEach(id=>
-  document.getElementById(id).addEventListener('input',()=>{updateStats();scheduleAutoSave();})
-);
+    ['hangerNum', 'hangerCat'].forEach(id =>
+      document.getElementById(id).addEventListener('input', () => { updateStats(); scheduleAutoSave(); })
+    );
 
-// ── Toast ──
-let toastTimer;
-function showToast(msg,type='') {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast'+(type?` ${type}`:'');
-  clearTimeout(toastTimer);
-  requestAnimationFrame(()=>{
-    t.classList.add('show');
-    toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
-  });
-}
+    // ── Toast ──
+    let toastTimer;
+    function showToast(msg, type = '') {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = 'toast' + (type ? ` ${type}` : '');
+      clearTimeout(toastTimer);
+      requestAnimationFrame(() => {
+        t.classList.add('show');
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+      });
+    }
 
-// ── Start ──
-if (!tryRestore()) resetCurrentHanger();
-</script>
+    // ── Start ──
+    if (!tryRestore()) resetCurrentHanger();
+  </script>
 </body>
+
 </html>
